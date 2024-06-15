@@ -105,7 +105,7 @@ while IFS= read -r file; do
     sed_find_replace 's/temporal_polyfill_1\.//g' "${file}" # Removes prefix from Temporal calls
     sed_find_replace 's/(require\(")(.*\/)/\1/g' "${file}" # Remove filepath from require statements
     sed_find_replace '/.*require\("tasker"\);/d' "${file}" # Remove tasker import
-    sed_find_replace 's/Tasker\.//g' "${file}" # Remove 'Tasker.' prefix from Tasker functions
+    sed_find_replace 's/tasker_1\.default\.//g' "${file}" # Remove prefix from tasker imports
 done <<< "$(find "${build_dir}/typescript" -type f -name "*.js")"
 
 # Process webview files
