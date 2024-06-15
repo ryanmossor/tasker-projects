@@ -1,0 +1,27 @@
+{
+    "compilerOptions": {
+        /* Visit https://aka.ms/tsconfig to read more about this file */
+        "target": "ESNext",
+        "module": "commonjs",
+        "allowJs": true,
+        "checkJs": true,
+        "outDir": "./build",
+        "removeComments": true,
+        "esModuleInterop": false,
+        "strict": false,
+        "alwaysStrict": false,
+        "noImplicitUseStrict": true,
+        "ignoreDeprecations": "5.0",
+        "skipLibCheck": true,
+        "types": ["vitest/globals"]
+    },
+    "include": [
+        "src/**/*",
+        "test/**/*",
+        "vite.config.js",
+        "tailwind.config.js"
+    ],
+    "exclude": [
+        "node_modules"
+    ]
+}

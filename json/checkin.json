@@ -1,0 +1,239 @@
+{
+    "habits": [
+        {
+            "name": "cardio",
+            "reminderText": "cardio workout",
+            "lastDate": "2023-02-15",
+            "daysSince": 1,
+            "reminderThreshold": 2,
+            "pastWeek": [
+                "2023-02-10",
+                "2023-02-12",
+                "2023-02-15"
+            ],
+            "tracked": true,
+            "types": [
+                "hike",
+                "hiit",
+                "kayaking",
+                "ride",
+                "run",
+                "stair climber",
+                "stationary bike"
+            ],
+            "weeklyTarget": 3
+        },
+        {
+            "name": "journal",
+            "reminderText": "journal entry",
+            "lastDate": "2023-02-13",
+            "pastWeek": [
+                "2023-02-09",
+                "2023-02-11",
+                "2023-02-12",
+                "2023-02-13"
+            ],
+            "tracked": true,
+            "weeklyTarget": 3,
+            "daysSince": 3
+        },
+        {
+            "name": "meditation",
+            "reminderText": "meditation session",
+            "lastDate": "2023-02-13",
+            "reminderThreshold": 1,
+            "pastWeek": [
+                "2023-02-09",
+                "2023-02-11",
+                "2023-02-12",
+                "2023-02-13"
+            ],
+            "tracked": true,
+            "weeklyTarget": 3,
+            "daysSince": 3
+        },
+        {
+            "name": "resistance",
+            "reminderText": "resistance workout",
+            "lastDate": "2023-02-14",
+            "daysSince": 2,
+            "reminderThreshold": 1,
+            "pastWeek": [
+                "2023-02-09",
+                "2023-02-11",
+                "2023-02-13",
+                "2023-02-14"
+            ],
+            "tracked": true,
+            "types": [
+                "calisthenics",
+                "lifting"
+            ],
+            "weeklyTarget": 3
+        },
+        {
+            "name": "sickInjured",
+            "lastDate": "2023-02-15",
+            "pastWeek": [
+                "2023-02-14",
+                "2023-02-15"
+            ],
+            "types": [
+                "sick",
+                "injured"
+            ],
+            "daysSince": 1
+        },
+        {
+            "name": "sleep",
+            "lastDate": "2024-05-22",
+            "daysSince": 1,
+            "pastWeek": [
+                "2024-05-19",
+                "2024-05-21",
+                "2024-05-22"
+            ],
+            "weeklyTarget": 4
+        },
+        {
+            "name": "yoga",
+            "reminderText": "yoga/mobility work session",
+            "lastDate": "2024-01-08",
+            "daysSince": 2,
+            "reminderThreshold": 1,
+            "pastWeek": [
+                "2024-01-03",
+                "2024-01-04",
+                "2024-01-05",
+                "2024-01-06",
+                "2024-01-07",
+                "2024-01-08",
+                "2024-01-09"
+            ],
+            "types": [
+                "yoga",
+                "mobility work"
+            ],
+            "tracked": true,
+            "weeklyTarget": 5
+        }
+    ],
+    "lists": {
+        "evening": {
+            "checkboxItems": {
+                "Habits": [
+                    "Journal",
+                    "Meditation",
+                    "Morning sunlight",
+                    "Read"
+                ],
+                "Exercise": [
+                    "Calisthenics",
+                    "Elliptical",
+                    "HIIT",
+                    "Hike",
+                    "Kayaking",
+                    "Lifting",
+                    "Ride",
+                    "Run",
+                    "Stair climber",
+                    "Stationary bike",
+                    "Yoga"
+                ],
+                "Lifestyle": [
+                    "Air travel",
+                    "Alcohol**",
+                    "Caffeine",
+                    "Commuting",
+                    "Late meal",
+                    "Sauna",
+                    "Work from home"
+                ],
+                "Status": [
+                    "Injured",
+                    "Seasonal allergies",
+                    "Sick"
+                ],
+                "Meds & Supplements": [
+                    "Aller-Clear",
+                    "Aller-Flo",
+                    "Apigenin",
+                    "Creatine",
+                    "Fish oil",
+                    "Magnesium Citrate",
+                    "Magnesium Threonate",
+                    "Theanine",
+                    "Vitamin C",
+                    "Vitamin D3"
+                ]
+            },
+            "rangeItems": {
+                "Mental Health": [
+                    "Overall Mood",
+                    "Irritability",
+                    "Productivity",
+                    "Sense of Control",
+                    "Sense of Purpose",
+                    "Stress"
+                ]
+            }
+        },
+        "morning": {
+            "checkboxItems": {
+                "Sleep": [
+                    "Away from home",
+                    "Fan",
+                    "Heater",
+                    "Humidifier",
+                    "Open window",
+                    "Screens <1hr before bed",
+                    "Screens in bed",
+                    "Shared bed",
+                    "White noise"
+                ]
+            },
+            "rangeItems": {
+                "Sleep": [
+                    "Feel Well-Rested"
+                ]
+            }
+        }
+    },
+    "rewards": {
+        "habitsTarget": 4,
+        "daysSinceLastRewardRoll": 3,
+        "rollStreak": 0,
+        "rewardList": [
+            {
+                "name": "blank",
+                "weight": 50,
+                "timesAppeared": 0,
+                "unredeemed": 0
+            },
+            {
+                "name": "Backpacking",
+                "unredeemed": 0,
+                "weight": 8,
+                "timesAppeared": 1
+            },
+            {
+                "name": "Restaurant",
+                "weight": 8,
+                "timesAppeared": 0,
+                "unredeemed": 4
+            },
+            {
+                "name": "Weekend trip",
+                "weight": 1,
+                "timesAppeared": 0,
+                "unredeemed": 1
+            },
+            {
+                "name": "Wishlist item",
+                "weight": 8,
+                "timesAppeared": 0,
+                "unredeemed": 2
+            }
+        ]
+    }
+}

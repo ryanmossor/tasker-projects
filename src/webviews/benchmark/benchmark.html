@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Benchmark</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <link rel="stylesheet" href="../output.css">
+    <style>
+        td:first-child {
+            font-weight: bold;
+        }
+    </style>
+
+    <script data-script-type="pc-dev-setup" src="../mocks.js"></script>
+    <script data-script-type="pc-dev-setup" src="../tasker.js"></script>
+
+    <script src="../utils.js"></script>
+    <script src="./benchmarkFunctions.js" defer></script>
+</head>
+
+<body class="font-sans text-black dark:bg-zinc-950 dark:text-zinc-100">
+    <h1 id="header" class="text-3xl font-bold text-center my-8">Benchmark Results</h1>
+    <main class="max-w-xl mx-auto my-8">
+        <table id="table" class="w-11/12 mx-auto border-2 border-black dark:border-zinc-500"></table>
+    </main>
+</body>
+
+</html>

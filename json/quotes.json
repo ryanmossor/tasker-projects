@@ -1,0 +1,22 @@
+{
+    "daily": {
+        "quotes": [
+            {
+                "quote": "No matter how far I drive, I'm always the same distance from the ditch.",
+                "author": "Andrew Huberman",
+                "id": 1,
+                "hasAppeared": false
+            },
+            {
+                "quote": "Don't let the perfect be the enemy of the good.",
+                "author": "Gretchen Rubin",
+                "id": 6,
+                "hasAppeared": false
+            }
+        ],
+        "nextId": 7,
+        "todaysQuoteId": 6
+    },
+    "weekly": "lorem",
+    "monthly": "lorem"
+}

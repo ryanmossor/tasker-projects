@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Check-in</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="../output.css">
+
+    <script data-script-type="pc-dev-setup" src="../mocks.js"></script>
+    <script data-script-type="pc-dev-setup" src="../tasker.js"></script>
+
+    <script src="../utils.js"></script>
+    <script src="./checkinFunctions.js" defer></script>
+</head>
+
+<body class="font-sans bg-neutral-100 text-black dark:bg-zinc-950 dark:text-zinc-100">
+    <main class="max-w-xl mx-auto">
+        <h1 id="header" class="text-3xl font-bold text-center my-8">{{ title }}</h1>
+        <form>
+            <div id="checklists"></div>
+            <div id="range-items"></div>
+            <div class="flex justify-center gap-x-6">
+                <button id="button" type="submit"
+                        class="rounded-lg w-3/12 mx-4 mt-4 mb-8 py-3 text-white font-medium bg-blue-600">
+                    Submit
+                </button>
+            </div>
+        </form>
+    </main>
+</body>
+
+</html>

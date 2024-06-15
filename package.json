@@ -1,0 +1,29 @@
+{
+    "scripts": {
+        "compile": "npx tsc --project tsconfig.prod.json",
+        "test": "npx vitest",
+        "build": "./build.sh",
+        "lint": "npx eslint .",
+        "css": "npx tailwindcss --output ./src/webviews/output.css --watch"
+    },
+    "dependencies": {
+        "axios": "^1.6.8",
+        "temporal-polyfill": "^0.2.4"
+    },
+    "devDependencies": {
+        "@googleapis/youtube": "^14.0.0",
+        "@types/node": "^20.12.8",
+        "@typescript-eslint/eslint-plugin": "^7.8.0",
+        "@typescript-eslint/parser": "^7.8.0",
+        "chalk": "^4.1.2",
+        "dotenv": "^16.4.5",
+        "eslint": "^8.57.0",
+        "eslint-config-airbnb-base": "^15.0.0",
+        "eslint-config-airbnb-typescript": "^18.0.0",
+        "eslint-plugin-import": "^2.29.1",
+        "fs": "^0.0.1-security",
+        "tailwindcss": "^3.4.3",
+        "typescript": "^5.4.5",
+        "vitest": "^1.6.0"
+    }
+}
