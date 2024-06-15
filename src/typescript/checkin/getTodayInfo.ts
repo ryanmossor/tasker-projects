@@ -1,6 +1,6 @@
 import { Temporal } from "temporal-polyfill";
 import { CHECKIN_COLUMN_MAPPING } from "../modules/constants";
-import Tasker from "../modules/tasker";
+import * as tasker from "../modules/tasker";
 import { formatDateTime, isEnvTasker } from "../modules/utils";
 
 export type TodayInfo = {
@@ -36,5 +36,5 @@ export function getTodayInfo(): TodayInfo {
 
 if (isEnvTasker()) {
     const todayInfo = getTodayInfo();
-    Tasker.setLocal("today_json", JSON.stringify(todayInfo));
+    tasker.setLocal("today_json", JSON.stringify(todayInfo));
 }

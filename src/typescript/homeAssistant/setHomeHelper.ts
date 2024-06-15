@@ -1,6 +1,6 @@
-import { Http } from "../modules/httpClient";
+import Http from "../modules/httpClient";
 import Logger from "../modules/logger";
-import Tasker from "../modules/tasker";
+import * as tasker from "../modules/tasker";
 import { isEnvTasker, tryGetGlobal, tryGetLocal } from "../modules/utils";
 
 async function toggleHome(state: "on" | "off"): Promise<void> {
@@ -25,7 +25,7 @@ async function toggleHome(state: "on" | "off"): Promise<void> {
     } catch (error) {
         Logger.error({ message: error, funcName: toggleHome.name });
     } finally {
-        Tasker.exit();
+        tasker.exit();
     }
 }
 

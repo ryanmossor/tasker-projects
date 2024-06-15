@@ -1,4 +1,4 @@
-import Tasker from "./tasker";
+import * as tasker from "./tasker";
 
 export function showTextDialog(dialogPayload: {
     title?: string;
@@ -10,7 +10,7 @@ export function showTextDialog(dialogPayload: {
     useHtml?: boolean;
     continueAfterError?: boolean;
 }): void {
-    Tasker.performTask("Show Dialog", 101, JSON.stringify({
+    tasker.performTask("Show Dialog", 101, JSON.stringify({
         type: "text",
         title: dialogPayload.title ?? " ",
         text: dialogPayload.text ?? " ",
@@ -29,7 +29,7 @@ export function showProgressDialog(dialogPayload: {
     useHtml?: boolean;
     continueAfterError?: boolean;
 }): void {
-    Tasker.performTask("Show Dialog", 101, JSON.stringify({
+    tasker.performTask("Show Dialog", 101, JSON.stringify({
         type: "progress",
         title: dialogPayload.title,
         text: dialogPayload.text ?? " ",
@@ -39,5 +39,5 @@ export function showProgressDialog(dialogPayload: {
 }
 
 export function dismissProgressDialog() {
-    Tasker.performTask("Show Dialog", 101, JSON.stringify({ type: "dismissProgress" }));
+    tasker.performTask("Show Dialog", 101, JSON.stringify({ type: "dismissProgress" }));
 }

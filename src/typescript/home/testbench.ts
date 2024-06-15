@@ -1,18 +1,18 @@
 import Logger from "../modules/logger";
 import { BenchmarkStats, benchmark } from "../modules/metrics";
-import Tasker from "../modules/tasker";
+import * as tasker from "../modules/tasker";
 import { isEnvTasker, isNullOrEmpty } from "../modules/utils";
 
 async function runBenchmarks() {
     try {
-        const count = isNullOrEmpty(Tasker.local("count")) ? 100 : Number(Tasker.local("count"));
+        const count = isNullOrEmpty(tasker.local("count")) ? 100 : Number(tasker.local("count"));
         const results: BenchmarkStats[] = [];
         const args = [];
 
         results.push(benchmark({
             name: "globalSplit",
             count,
-            func: (() => Tasker.global("JS_PATH").split(":").find((x) => x.includes("utils"))),
+            func: (() => tasker.global("JS_PATH").split(":").find((x) => x.includes("utils"))),
             args,
         }));
 
@@ -24,12 +24,12 @@ async function runBenchmarks() {
         }));
 
         const filename = `/sdcard/Documents/benchmarks/${results.map((obj) => obj.name).join("_")}.json`;
-        Tasker.writeFile(filename, JSON.stringify(results, null, 4), false);
-        Tasker.setLocal("metrics_path", filename);
+        tasker.writeFile(filename, JSON.stringify(results, null, 4), false);
+        tasker.setLocal("metrics_path", filename);
     } catch (error) {
         Logger.error({ message: error, funcName: runBenchmarks.name });
     } finally {
-        Tasker.exit();
+        tasker.exit();
     }
 }
 

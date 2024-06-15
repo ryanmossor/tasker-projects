@@ -1,4 +1,4 @@
-import Tasker from "../modules/tasker";
+import * as tasker from "../modules/tasker";
 import { isEnvTasker, isNullOrEmpty, readJsonData } from "../modules/utils";
 import { Quote, QuotesJson } from "../types/types";
 
@@ -15,6 +15,6 @@ export function notifyTodaysQuote(quotesJson: QuotesJson) {
 if (isEnvTasker()) {
     const quotesJson = readJsonData<QuotesJson>({ filename: "quotes.json" });
     const todaysQuote = notifyTodaysQuote(quotesJson.data);
-    Tasker.setLocal("todays_quote", todaysQuote);
-    Tasker.exit();
+    tasker.setLocal("todays_quote", todaysQuote);
+    tasker.exit();
 }

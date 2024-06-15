@@ -1,4 +1,4 @@
-import { Http } from "../../src/typescript/modules/httpClient";
+import Http from "../../src/typescript/modules/httpClient";
 import { Playlist } from "../../src/typescript/types/youtubeTypes";
 import { getPlaylistTitleAndId } from "../../src/typescript/yoga/manualPlaylistUpdate";
 

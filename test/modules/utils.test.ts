@@ -1,5 +1,5 @@
 import { Temporal } from "temporal-polyfill";
-import Tasker from "../../src/typescript/modules/tasker";
+import * as tasker from "../../src/typescript/modules/tasker";
 import { formatDateTime, isEnvTasker, isNullOrEmpty, readJsonData } from "../../src/typescript/modules/utils";
 
 describe("utils", () => {
@@ -44,7 +44,7 @@ describe("utils", () => {
     describe("isEnvTasker", () => {
         it("should return false if current env is not Tasker", () => {
             // arrange
-            vi.spyOn(Tasker, "global").mockImplementation(() => "");
+            vi.spyOn(tasker, "global").mockImplementation(() => "");
 
             // act
             const result = isEnvTasker();
@@ -55,7 +55,7 @@ describe("utils", () => {
 
         it("should return true if current env is Tasker", () => {
             // arrange
-            vi.spyOn(Tasker, "global").mockImplementation(() => "34");
+            vi.spyOn(tasker, "global").mockImplementation(() => "34");
 
             // act
             const result = isEnvTasker();
@@ -69,7 +69,7 @@ describe("utils", () => {
         it("should append .json extension if not provided", () => {
             // arrange
             const expectedJsonData = { test: "test" };
-            vi.spyOn(Tasker, "readFile").mockImplementation(() => JSON.stringify(expectedJsonData));
+            vi.spyOn(tasker, "readFile").mockImplementation(() => JSON.stringify(expectedJsonData));
 
             // act
             const result = readJsonData({ filename: "test" });
@@ -80,8 +80,8 @@ describe("utils", () => {
 
         it("should exit if JSON file not found", () => {
             // arrange
-            vi.spyOn(Tasker, "readFile").mockImplementation(() => "undefined");
-            const taskerExit = vi.spyOn(Tasker, "exit").mockImplementation(() => {});
+            vi.spyOn(tasker, "readFile").mockImplementation(() => "undefined");
+            const taskerExit = vi.spyOn(tasker, "exit").mockImplementation(() => {});
 
             // act
             const result = readJsonData({ filename: "test.json" });
@@ -93,8 +93,8 @@ describe("utils", () => {
 
         it("should exit if JSON file is invalid", () => {
             // arrange
-            vi.spyOn(Tasker, "readFile").mockImplementation(() => "invalid JSON");
-            const taskerExit = vi.spyOn(Tasker, "exit").mockImplementation(() => {});
+            vi.spyOn(tasker, "readFile").mockImplementation(() => "invalid JSON");
+            const taskerExit = vi.spyOn(tasker, "exit").mockImplementation(() => {});
 
             // act
             const result = readJsonData({ filename: "test.json" });
@@ -108,8 +108,8 @@ describe("utils", () => {
             it(`should return JSON data for ${filename}`, () => {
                 // arrange
                 const expectedJsonData = { test: "test" };
-                vi.spyOn(Tasker, "readFile").mockImplementation(() => JSON.stringify(expectedJsonData));
-                const taskerExit = vi.spyOn(Tasker, "exit").mockImplementation(() => {});
+                vi.spyOn(tasker, "readFile").mockImplementation(() => JSON.stringify(expectedJsonData));
+                const taskerExit = vi.spyOn(tasker, "exit").mockImplementation(() => {});
 
                 // act
                 const result = readJsonData({ filename });
@@ -129,7 +129,7 @@ describe("utils", () => {
             "05/11/2024 14:49:23", // invalid date format
         ])("should exit and return null given invalid input string %s", (inputStr) => {
             // arrange
-            const taskerExit = vi.spyOn(Tasker, "exit").mockImplementation(() => {});
+            const taskerExit = vi.spyOn(tasker, "exit").mockImplementation(() => {});
 
             // act
             const result = formatDateTime(inputStr, "h:mm A");

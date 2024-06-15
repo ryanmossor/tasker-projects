@@ -1,7 +1,7 @@
 import assert from "../modules/assert";
-import { Http } from "../modules/httpClient";
+import Http from "../modules/httpClient";
 import Logger from "../modules/logger";
-import Tasker from "../modules/tasker";
+import * as tasker from "../modules/tasker";
 import { isEnvTasker, readJsonData, tryGetGlobal } from "../modules/utils";
 import { CheckinApiResponse, CheckinQueueItem } from "../types/types";
 
@@ -20,8 +20,8 @@ async function processCheckinQueue() {
         assert(response != null, "Received null response from check-in API");
 
         for (const result of response.results) {
-            Tasker.performTask("asPopulateCell", 101, JSON.stringify(result));
-            Tasker.wait(100);
+            tasker.performTask("asPopulateCell", 101, JSON.stringify(result));
+            tasker.wait(100);
         }
 
         queueJson.data = response.unprocessed;
@@ -42,11 +42,11 @@ async function processCheckinQueue() {
             funcName: processCheckinQueue.name,
         });
 
-        Tasker.setGlobal("CHECKIN_QUEUE_READY", null);
+        tasker.setGlobal("CHECKIN_QUEUE_READY", null);
     } catch (error) {
         Logger.error({ message: error, funcName: processCheckinQueue.name });
     } finally {
-        Tasker.exit();
+        tasker.exit();
     }
 }
 

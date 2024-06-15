@@ -2,7 +2,7 @@ import { Temporal } from "temporal-polyfill";
 import assert from "./assert";
 import { DATE_TIME_LOCALE } from "./constants";
 import Logger from "./logger";
-import Tasker from "./tasker";
+import * as tasker from "./tasker";
 
 export function capitalize(str: string): string {
     return str ? str.charAt(0).toUpperCase() + str.slice(1).toLowerCase() : "";
@@ -52,13 +52,13 @@ export function uniq<T>(arr: T[]): T[] {
 
 function tryGetTaskerVar(varName: string, type: "global" | "local"): string {
     try {
-        const result = type === "global" ? Tasker.global(varName) : Tasker.local(varName);
+        const result = type === "global" ? tasker.global(varName) : tasker.local(varName);
         assert(!isNullOrEmpty(result) && result !== "{}" && result !== "[]", `${type} variable ${varName} is empty`);
 
         return result;
     } catch (error) {
         Logger.error({ message: error });
-        Tasker.exit();
+        tasker.exit();
     }
 }
 
@@ -80,7 +80,7 @@ export function tryGetGlobal(varName: string): string {
 
 /** @returns {boolean} */
 export function isEnvTasker(): boolean {
-    return Tasker.global("SDK") !== "";
+    return tasker.global("SDK") !== "";
 }
 
 export class JsonData<T> {
@@ -92,10 +92,10 @@ export class JsonData<T> {
      * @param {boolean} [options.prettyPrint] - Whether to print JSON file with 4-space indenting. Default: `true`
      */
     public save({ prettyPrint }: { prettyPrint?: boolean; } = { prettyPrint: true }): void {
-        if (Tasker.global("DRY_RUN") !== "1") {
-            Tasker.writeFile(this.path, JSON.stringify(this.data, null, prettyPrint ? 4 : 0), false);
+        if (tasker.global("DRY_RUN") !== "1") {
+            tasker.writeFile(this.path, JSON.stringify(this.data, null, prettyPrint ? 4 : 0), false);
         } else {
-            Tasker.flash("Dry run -- save skipped");
+            tasker.flash("Dry run -- save skipped");
         }
     }
 }
@@ -108,19 +108,19 @@ export class JsonData<T> {
  */
 export function readJsonData<T>({ filename }: { filename: string }): JsonData<T> {
     try {
-        let path = filename.includes("/") ? filename : `${Tasker.global("JSON_PATH")}/${filename}`;
+        let path = filename.includes("/") ? filename : `${tasker.global("JSON_PATH")}/${filename}`;
         if (!filename.endsWith(".json")) {
             path = `${path}.json`;
         }
 
-        const json: string = Tasker.readFile(path);
+        const json: string = tasker.readFile(path);
         assert(!isNullOrEmpty(json), `JSON file ${path} should not be empty`);
         const data: T = JSON.parse(json);
 
         return new JsonData<T>(data, path);
     } catch (error) {
         Logger.error({ message: error, funcName: readJsonData.name });
-        Tasker.exit();
+        tasker.exit();
         return null;
     }
 }
@@ -164,7 +164,7 @@ export function formatDateTime(
             .replaceAll("MM", date.toLocaleString(DATE_TIME_LOCALE, { month: "2-digit" }));
     } catch (error) {
         Logger.error({ message: error, funcName: formatDateTime.name });
-        Tasker.exit();
+        tasker.exit();
         return null;
     }
 }

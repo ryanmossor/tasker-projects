@@ -105,7 +105,7 @@ while IFS= read -r file; do
     sed_find_replace 's/temporal_polyfill_1\.//g' "${file}" # Removes prefix from Temporal calls
     sed_find_replace 's/(require\(")(.*\/)/\1/g' "${file}" # Remove filepath from require statements
     sed_find_replace '/.*require\("tasker"\);/d' "${file}" # Remove tasker import
-    sed_find_replace 's/tasker_1\.default\.//g' "${file}" # Remove prefix from tasker imports
+    sed_find_replace 's/tasker\.//g' "${file}" # Remove prefix from tasker imports
 done <<< "$(find "${build_dir}/typescript" -type f -name "*.js")"
 
 # Process webview files
@@ -124,7 +124,7 @@ while IFS= read -r file; do
     sed_find_replace "s_\"\.\./(.*.(html|css|js))_\"/sdcard/Tasker/webviews/\1_" "${file}"
 
     sed_find_replace '/data-script-type="pc-dev-setup"/d' "$file" # Remove PC dev <script> tags
-    sed_find_replace 's/Tasker\./window\.tk\./g' "${file}" # Replace 'Tasker.' prefix with 'window.tk.'
+    sed_find_replace 's/tasker\./window\.tk\./g' "${file}" # Replace 'tasker.' prefix with 'window.tk.'
 done <<< "$(find "${build_dir}/webviews" -type f \( -name "*.html" -o -name "*.js" \))"
 
 # Cleanup

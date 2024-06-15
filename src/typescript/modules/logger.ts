@@ -1,7 +1,7 @@
 import { Temporal } from "temporal-polyfill";
 import { LogMessage, LogParams } from "../types/types";
 import { notificationActions, notificationIcons, sendNotification } from "./sendNotification";
-import Tasker from "./tasker";
+import * as tasker from "./tasker";
 
 const LOG_LEVEL = {
     ERROR: 0,
@@ -17,9 +17,9 @@ function isNullOrWhitespace(str: string): boolean {
 
 /** Tasker Logger */
 export default class Logger {
-    private static notifThreshold: string = isNullOrWhitespace(Tasker.global("LOG_NOTIF_THRESHOLD"))
+    private static notifThreshold: string = isNullOrWhitespace(tasker.global("LOG_NOTIF_THRESHOLD"))
         ? "WARNING"
-        : Tasker.global("LOG_NOTIF_THRESHOLD");
+        : tasker.global("LOG_NOTIF_THRESHOLD");
 
     /**
      * Writes JSON-formatted log messages to a file.
@@ -35,7 +35,7 @@ export default class Logger {
             return;
         }
 
-        const logLevel = isNullOrWhitespace(Tasker.global("LOG_LEVEL")) ? "INFO" : Tasker.global("LOG_LEVEL");
+        const logLevel = isNullOrWhitespace(tasker.global("LOG_LEVEL")) ? "INFO" : tasker.global("LOG_LEVEL");
         if (LOG_LEVEL[level] > LOG_LEVEL[logLevel]) {
             return;
         }
@@ -43,8 +43,8 @@ export default class Logger {
         const logMessage: LogMessage = {
             level,
             timestamp: Temporal.Now.plainDateTimeISO().toLocaleString(),
-            task: Tasker.local("caller").replace("task=", ""),
-            action: Tasker.local("tasker_current_action_number"),
+            task: tasker.local("caller").replace("task=", ""),
+            action: tasker.local("tasker_current_action_number"),
             message: `${message}`,
         };
 
@@ -60,7 +60,7 @@ export default class Logger {
         }
 
         const outputFile = logFile ?? `/sdcard/Tasker/log/${Temporal.Now.plainDateISO().toPlainYearMonth()}.txt`;
-        Tasker.writeFile(outputFile, `${JSON.stringify(logMessage, null, 4)}\n`, true);
+        tasker.writeFile(outputFile, `${JSON.stringify(logMessage, null, 4)}\n`, true);
 
         if (LOG_LEVEL[level] <= LOG_LEVEL[this.notifThreshold]) {
             const notifTitle = `Log Message: ${logMessage.task}`;

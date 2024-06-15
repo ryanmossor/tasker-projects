@@ -1,7 +1,7 @@
 import { habitsDailyReset, updateTrackedItemDates } from "../modules/habitFunctions";
 import Logger from "../modules/logger";
 import { rewardsDailyUpdate } from "../modules/rewardFunctions";
-import Tasker from "../modules/tasker";
+import * as tasker from "../modules/tasker";
 import { readJsonData, tryGetGlobal } from "../modules/utils";
 import { CheckinJson, CheckinQueueItem } from "../types/types";
 
@@ -35,7 +35,7 @@ const vars = [
 ];
 
 for (const globalVar of vars) {
-    Tasker.setGlobal(globalVar, null);
+    tasker.setGlobal(globalVar, null);
 }
 
-Tasker.writeFile(`/sdcard/Tasker/distraction-keys/${crypto.randomUUID()}`, btoa(crypto.randomUUID()), false);
+tasker.writeFile(`/sdcard/Tasker/distraction-keys/${crypto.randomUUID()}`, btoa(crypto.randomUUID()), false);

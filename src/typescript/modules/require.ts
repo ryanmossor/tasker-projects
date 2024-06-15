@@ -1,5 +1,5 @@
 import { LogMessage, NotificationPayload } from "../types/types";
-import Tasker from "./tasker";
+import * as tasker from "./tasker";
 
 function isNullOrWhitespace(str: string): boolean {
     return str == null || str.trim() === "" || str === "undefined";
@@ -17,13 +17,13 @@ function handleError(error: Error): void {
     const logMessage: LogMessage = {
         level: "ERROR",
         timestamp: new Date().toLocaleString(),
-        task: Tasker.local("caller").replace("task=", ""),
-        action: Tasker.local("tasker_current_action_number"),
+        task: tasker.local("caller").replace("task=", ""),
+        action: tasker.local("tasker_current_action_number"),
         message: `${error}`,
     };
 
     const logPath = "/sdcard/Tasker/log/import_log.txt";
-    Tasker.writeFile(logPath, `${JSON.stringify(logMessage, null, 4)}\n`, true);
+    tasker.writeFile(logPath, `${JSON.stringify(logMessage, null, 4)}\n`, true);
 
     const title = `Log Message: ${logMessage.task}`;
     const notifPayload: NotificationPayload = {
@@ -38,8 +38,8 @@ function handleError(error: Error): void {
         },
     };
 
-    if (!Tasker.performTask("Send Notification", 101, JSON.stringify(notifPayload))) {
-        Tasker.flashLong(`${error}`); // flash error if "Send Notification" task doesn't exist
+    if (!tasker.performTask("Send Notification", 101, JSON.stringify(notifPayload))) {
+        tasker.flashLong(`${error}`); // flash error if "Send Notification" task doesn't exist
     }
 }
 
@@ -50,8 +50,8 @@ function require(moduleName: string) {
             return require.cache[moduleName].exports;
         }
 
-        const path = `${dirname(Tasker.global("CommonJS"))}/${moduleName}.js`;
-        const src: string = Tasker.readFile(path);
+        const path = `${dirname(tasker.global("CommonJS"))}/${moduleName}.js`;
+        const src: string = tasker.readFile(path);
         if (isNullOrWhitespace(src)) {
             throw new Error(`Could not load ${moduleName} from ${path}`);
         }
@@ -65,7 +65,7 @@ function require(moduleName: string) {
         return require.cache[moduleName].exports;
     } catch (error) {
         handleError(error);
-        Tasker.exit();
+        tasker.exit();
     }
 }
 

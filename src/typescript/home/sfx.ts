@@ -1,5 +1,5 @@
 import Logger from "../modules/logger";
-import Tasker from "../modules/tasker";
+import * as tasker from "../modules/tasker";
 import { tryGetGlobal } from "../modules/utils";
 
 type SfxJson = {
@@ -18,13 +18,13 @@ try {
         settings put secure charging_sounds_enabled 0
         echo "${filename}" >> ${logPath}
         echo "$(tail -10 ${logPath})" > ${logPath}`;
-    Tasker.shell(cmd, true, 10);
+    tasker.shell(cmd, true, 10);
 
-    const sfxFiles: string[] = Tasker.listFiles("/sdcard/Notifications/sfx", false).split("\n");
+    const sfxFiles: string[] = tasker.listFiles("/sdcard/Notifications/sfx", false).split("\n");
     sfxJson.nextIndex = sfxJson.nextIndex + 1 < sfxFiles.length ? sfxJson.nextIndex + 1 : 0;
     sfxJson.nextSfxFile = sfxFiles[sfxJson.nextIndex];
 
-    Tasker.setGlobal("SFX_JSON", JSON.stringify(sfxJson));
+    tasker.setGlobal("SFX_JSON", JSON.stringify(sfxJson));
 } catch (error) {
     Logger.error({ message: error, funcName: "sfx" });
 }

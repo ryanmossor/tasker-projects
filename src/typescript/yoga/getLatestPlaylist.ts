@@ -1,7 +1,7 @@
 import { Temporal } from "temporal-polyfill";
-import { Http } from "../modules/httpClient";
+import Http from "../modules/httpClient";
 import Logger from "../modules/logger";
-import Tasker from "../modules/tasker";
+import * as tasker from "../modules/tasker";
 import { formatDateTime, isEnvTasker, readJsonData, tryGetGlobal } from "../modules/utils";
 import { YogaJson } from "../types/types";
 import { Playlist } from "../types/youtubeTypes";
@@ -18,7 +18,7 @@ export async function getLatestPlaylist(ytApiKey: string, yogaJson: YogaJson): P
         });
     } catch (error) {
         Logger.error({ message: error, funcName: getLatestPlaylist.name });
-        Tasker.exit();
+        tasker.exit();
     }
 }
 
@@ -58,7 +58,7 @@ if (isEnvTasker()) {
         const updatedYogaJson = updatePlaylistData(playlistData, yogaJson.data);
 
         yogaJson.save();
-        Tasker.setLocal("playlist_title", updatedYogaJson.playlistTitle);
-        Tasker.exit();
+        tasker.setLocal("playlist_title", updatedYogaJson.playlistTitle);
+        tasker.exit();
     })();
 }

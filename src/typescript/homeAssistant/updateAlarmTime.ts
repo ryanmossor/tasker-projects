@@ -1,7 +1,7 @@
 import { Temporal } from "temporal-polyfill";
-import { Http } from "../modules/httpClient";
+import Http from "../modules/httpClient";
 import Logger from "../modules/logger";
-import Tasker from "../modules/tasker";
+import * as tasker from "../modules/tasker";
 import { isEnvTasker, tryGetGlobal } from "../modules/utils";
 
 async function updateAlarmTime(): Promise<void> {
@@ -36,7 +36,7 @@ async function updateAlarmTime(): Promise<void> {
     } catch (error) {
         Logger.error({ message: error, funcName: updateAlarmTime.name });
     } finally {
-        Tasker.exit();
+        tasker.exit();
     }
 }
 

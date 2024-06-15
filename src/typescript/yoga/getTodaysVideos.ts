@@ -1,7 +1,7 @@
 import { Temporal } from "temporal-polyfill";
-import { Http } from "../modules/httpClient";
+import Http from "../modules/httpClient";
 import Logger from "../modules/logger";
-import Tasker from "../modules/tasker";
+import * as tasker from "../modules/tasker";
 import { isEnvTasker, readJsonData, tryGetGlobal } from "../modules/utils";
 import { YogaJson } from "../types/types";
 import { PlaylistItem } from "../types/youtubeTypes";
@@ -39,7 +39,7 @@ async function getPlaylistData(playlistId: string): Promise<PlaylistItem> {
         });
     } catch (error) {
         Logger.error({ message: error, funcName: getPlaylistData.name });
-        Tasker.exit();
+        tasker.exit();
     }
 }
 
@@ -60,7 +60,7 @@ async function getVideoDuration(vidId: string): Promise<string> {
         return formattedDuration;
     } catch (error) {
         Logger.error({ message: error, funcName: getVideoDuration.name });
-        Tasker.exit();
+        tasker.exit();
     }
 }
 
@@ -116,8 +116,8 @@ if (isEnvTasker()) {
 
     (async () => {
         yogaJson.data = await getTodaysVideos(yogaJson.data);
-        Tasker.setGlobal("YOGA_TIME", yogaJson.data.defaultNotifTime);
+        tasker.setGlobal("YOGA_TIME", yogaJson.data.defaultNotifTime);
         yogaJson.save();
-        Tasker.exit();
+        tasker.exit();
     })();
 }

@@ -1,6 +1,6 @@
 import axios, { Method } from "axios";
 import Logger from "./logger";
-import Tasker from "./tasker";
+import * as tasker from "./tasker";
 import { isNullOrEmpty } from "./utils";
 
 class HttpError extends Error {
@@ -35,14 +35,14 @@ type AxiosErrorLogMessage = {
     };
 };
 
-export class Http {
+export default class Http {
     private static async makeRequest<TData = any, TResponse = any>(method: Method, {
         url,
         body,
         params,
         headers,
     }: HttpRequestParams<TData>) : Promise<TResponse> {
-        if (isNullOrEmpty(Tasker.global("ONLINE"))) {
+        if (isNullOrEmpty(tasker.global("ONLINE"))) {
             throw new HttpError("Device offline - skipping HTTP request", { method, url });
         }
 

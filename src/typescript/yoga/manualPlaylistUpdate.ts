@@ -1,6 +1,6 @@
-import { Http } from "../modules/httpClient";
+import Http from "../modules/httpClient";
 import Logger from "../modules/logger";
-import Tasker from "../modules/tasker";
+import * as tasker from "../modules/tasker";
 import { isEnvTasker, readJsonData, tryGetGlobal, tryGetLocal } from "../modules/utils";
 import { YogaJson } from "../types/types";
 import { Playlist } from "../types/youtubeTypes";
@@ -26,7 +26,7 @@ export async function getPlaylistTitleAndId(ytApiKey: string, playlistUrl: strin
         };
     } catch (error) {
         Logger.error({ message: error, funcName: getPlaylistTitleAndId.name });
-        Tasker.exit();
+        tasker.exit();
     }
 }
 
@@ -45,8 +45,8 @@ if (isEnvTasker()) {
             playlistTitle,
         };
 
-        Tasker.setLocal("playlist_title", playlistTitle);
+        tasker.setLocal("playlist_title", playlistTitle);
         yogaJson.save();
-        Tasker.exit();
+        tasker.exit();
     })();
 }

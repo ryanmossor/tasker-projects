@@ -1,5 +1,5 @@
 import { notificationActions, sendNotification } from "../modules/sendNotification";
-import Tasker from "../modules/tasker";
+import * as tasker from "../modules/tasker";
 import { capitalize, readJsonData } from "../modules/utils";
 import { CheckinJson } from "../types/types";
 
@@ -25,5 +25,5 @@ for (const habit of reminderHabits) {
         },
     });
 
-    Tasker.wait(1000);
+    tasker.wait(1000);
 }

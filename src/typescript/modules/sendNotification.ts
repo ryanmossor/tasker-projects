@@ -1,5 +1,5 @@
 import { NotificationPayload } from "../types/types";
-import Tasker from "./tasker";
+import * as tasker from "./tasker";
 
 export const notificationActions = {
     rewardsUi: "📅 Rewards UI",
@@ -17,7 +17,7 @@ export const notificationIcons = {
 };
 
 export function sendNotification(notifPayload: NotificationPayload): void {
-    Tasker.performTask("Send Notification", 101, JSON.stringify({
+    tasker.performTask("Send Notification", 101, JSON.stringify({
         ...notifPayload,
         icon: notifPayload.icon ?? notificationIcons.ringingBell,
         priority: notifPayload.priority ?? 3,

@@ -1,7 +1,7 @@
 import { Temporal } from "temporal-polyfill";
 import Logger from "../../src/typescript/modules/logger";
 import { notificationActions, notificationIcons } from "../../src/typescript/modules/sendNotification";
-import Tasker from "../../src/typescript/modules/tasker";
+import * as tasker from "../../src/typescript/modules/tasker";
 
 const baseLogMessage = {
     task: "Test",
@@ -23,10 +23,10 @@ describe("logger", () => {
     });
 
     beforeEach(() => {
-        taskerPerformTask = vi.spyOn(Tasker, "performTask").mockImplementation(() => true);
-        taskerWriteFile = vi.spyOn(Tasker, "writeFile").mockImplementation(() => {});
+        taskerPerformTask = vi.spyOn(tasker, "performTask").mockImplementation(() => true);
+        taskerWriteFile = vi.spyOn(tasker, "writeFile").mockImplementation(() => {});
 
-        vi.spyOn(Tasker, "local").mockImplementation((str) => {
+        vi.spyOn(tasker, "local").mockImplementation((str) => {
             if (str === "caller")
                 return `task=${baseLogMessage.task}`;
             if (str === "tasker_current_action_number")
@@ -42,7 +42,7 @@ describe("logger", () => {
 
     it("should not log at level above current", () => {
         // arrange
-        vi.spyOn(Tasker, "global").mockImplementation(() => "ERROR");
+        vi.spyOn(tasker, "global").mockImplementation(() => "ERROR");
 
         // act
         Logger.info({ message: baseLogMessage.message });
@@ -53,7 +53,7 @@ describe("logger", () => {
 
     it("should log at level equal to current", () => {
         // arrange
-        vi.spyOn(Tasker, "global").mockImplementation(() => "INFO");
+        vi.spyOn(tasker, "global").mockImplementation(() => "INFO");
 
         // act
         Logger.info({ message: baseLogMessage.message });
@@ -65,7 +65,7 @@ describe("logger", () => {
 
     it("should log at level below current", () => {
         // arrange
-        vi.spyOn(Tasker, "global").mockImplementation(() => "DEBUG");
+        vi.spyOn(tasker, "global").mockImplementation(() => "DEBUG");
 
         // act
         Logger.info({ message: baseLogMessage.message });
@@ -78,7 +78,7 @@ describe("logger", () => {
     ["ERROR", "WARNING"].forEach((level) => {
         it("should notify when log level above or equal to notification threshold", () => {
             // arrange
-            vi.spyOn(Tasker, "global").mockImplementation((varName: string) => {
+            vi.spyOn(tasker, "global").mockImplementation((varName: string) => {
                 if (varName === "LOG_LEVEL")
                     return level;
                 if (varName === "LOG_NOTIF_THRESHOLD")
@@ -118,7 +118,7 @@ describe("logger", () => {
     ["INFO", "DEBUG"].forEach((level) => {
         it("should not notify when log level below notification threshold", () => {
             // arrange
-            vi.spyOn(Tasker, "global").mockImplementation((varName: string) => {
+            vi.spyOn(tasker, "global").mockImplementation((varName: string) => {
                 if (varName === "LOG_LEVEL")
                     return level;
                 if (varName === "LOG_NOTIF_THRESHOLD")
@@ -136,7 +136,7 @@ describe("logger", () => {
 
     it("should log to default output file if none provided", () => {
         // arrange
-        vi.spyOn(Tasker, "global").mockImplementation(() => "INFO");
+        vi.spyOn(tasker, "global").mockImplementation(() => "INFO");
 
         // act
         Logger.info({ message: baseLogMessage.message });
@@ -147,7 +147,7 @@ describe("logger", () => {
 
     it("should log to custom output file if provided", () => {
         // arrange
-        vi.spyOn(Tasker, "global").mockImplementation(() => "INFO");
+        vi.spyOn(tasker, "global").mockImplementation(() => "INFO");
         const logFile = "test.txt";
 
         // act
@@ -160,7 +160,7 @@ describe("logger", () => {
     it("should write default log entry containing timestamp, action, task, and message", () => {
         // arrange
         const level = "INFO";
-        vi.spyOn(Tasker, "global").mockImplementation(() => level);
+        vi.spyOn(tasker, "global").mockImplementation(() => level);
 
         const expectedLogMessage = {
             ...baseLogMessage,
@@ -181,7 +181,7 @@ describe("logger", () => {
     it("should include function name in log message if provided", () => {
         // arrange
         const level = "INFO";
-        vi.spyOn(Tasker, "global").mockImplementation(() => level);
+        vi.spyOn(tasker, "global").mockImplementation(() => level);
         const funcName = "testFunction";
 
         const expectedLogMessage = {

@@ -1,6 +1,6 @@
-import { Http } from "../modules/httpClient";
+import Http from "../modules/httpClient";
 import Logger from "../modules/logger";
-import Tasker from "../modules/tasker";
+import * as tasker from "../modules/tasker";
 import { readJsonData, tryGetGlobal, tryGetLocal } from "../modules/utils";
 import { CheckinJson, CheckinLists } from "../types/types";
 
@@ -31,7 +31,7 @@ async function updateChecklists(fullChecklist: string[], trackedActivities: stri
     } finally {
         // have to put this here (not after updateChecklists call) otherwise API throws `BadHttpRequestException:
         // Unexpected end of request content` the first time the check-in lists are loaded by the API
-        Tasker.exit();
+        tasker.exit();
     }
 }
 

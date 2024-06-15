@@ -1,7 +1,7 @@
 import Logger from "../modules/logger";
 import { chooseReward, countSuccessfulHabits, generateHabitScorecard } from "../modules/rewardFunctions";
 import { notificationActions, notificationIcons, sendNotification } from "../modules/sendNotification";
-import Tasker from "../modules/tasker";
+import * as tasker from "../modules/tasker";
 import { isEnvTasker, readJsonData } from "../modules/utils";
 import { CheckinJson } from "../types/types";
 
@@ -35,7 +35,7 @@ function processRewards() {
                 },
             });
 
-            Tasker.wait(1000);
+            tasker.wait(1000);
         }
 
         sendNotification({
@@ -83,7 +83,7 @@ function processRewards() {
         checkinJson.save();
     } catch (error) {
         Logger.error({ message: error, funcName: processRewards.name });
-        Tasker.exit();
+        tasker.exit();
     }
 }
 

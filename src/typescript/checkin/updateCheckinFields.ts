@@ -1,6 +1,6 @@
 import { Temporal } from "temporal-polyfill";
 import { CHECKIN_COLUMN_MAPPING } from "../modules/constants";
-import Tasker from "../modules/tasker";
+import * as tasker from "../modules/tasker";
 import { formatDateTime } from "../modules/utils";
 import { CheckinFields } from "../types/types";
 
@@ -13,5 +13,5 @@ const checkinFields: CheckinFields = {
     cellReference: `${CHECKIN_COLUMN_MAPPING[today.day.toString()]}1`,
 };
 
-Tasker.setGlobal("CHECKIN_FIELDS", JSON.stringify(checkinFields));
-Tasker.setGlobal("CHECKIN_FIELDS_SET", "1");
+tasker.setGlobal("CHECKIN_FIELDS", JSON.stringify(checkinFields));
+tasker.setGlobal("CHECKIN_FIELDS_SET", "1");

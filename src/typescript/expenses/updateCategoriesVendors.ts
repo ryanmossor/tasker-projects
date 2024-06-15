@@ -1,4 +1,4 @@
-import Tasker from "../modules/tasker";
+import * as tasker from "../modules/tasker";
 import { isEnvTasker, readJsonData, tryGetLocal, uniq } from "../modules/utils";
 import { ExpensesJson } from "../types/types";
 
@@ -19,5 +19,5 @@ if (isEnvTasker()) {
     expensesJson.data = updateCategoriesVendors(expenseCategories, expensesJson.data.vendors, expenseVendors);
     expensesJson.save({ prettyPrint: false });
 
-    Tasker.exit();
+    tasker.exit();
 }

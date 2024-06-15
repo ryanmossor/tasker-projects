@@ -1,7 +1,7 @@
 import { Temporal } from "temporal-polyfill";
 import assert from "../modules/assert";
 import Logger from "../modules/logger";
-import Tasker from "../modules/tasker";
+import * as tasker from "../modules/tasker";
 import { formatDateTime, isEnvTasker, readJsonData, tryGetGlobal, tryGetLocal } from "../modules/utils";
 import { CheckinFields, CheckinJson, CheckinQueueItem, Habit } from "../types/types";
 
@@ -86,7 +86,7 @@ export function setSleepTime({ queueItem, checkinDate, startOrEnd, now }: {
         return queueItem;
     } catch (error) {
         Logger.error({ message: error, funcName: setSleepTime.name });
-        Tasker.exit();
+        tasker.exit();
         return null;
     }
 }
@@ -120,6 +120,6 @@ if (isEnvTasker()) {
     } catch (error) {
         Logger.error({ message: error });
     } finally {
-        Tasker.exit();
+        tasker.exit();
     }
 }
