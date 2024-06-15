@@ -1,5 +1,5 @@
 import { Temporal } from "temporal-polyfill";
-import assert from "./assert";
+import { assert } from "./assert";
 import { DATE_TIME_LOCALE } from "./constants";
 import Logger from "./logger";
 import * as tasker from "./tasker";
@@ -121,7 +121,7 @@ export function readJsonData<T>({ filename }: { filename: string }): JsonData<T>
     } catch (error) {
         Logger.error({ message: error, funcName: readJsonData.name });
         tasker.exit();
-        return null;
+        throw error;
     }
 }
 
@@ -165,6 +165,6 @@ export function formatDateTime(
     } catch (error) {
         Logger.error({ message: error, funcName: formatDateTime.name });
         tasker.exit();
-        return null;
+        throw error;
     }
 }

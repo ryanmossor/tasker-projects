@@ -1,4 +1,5 @@
 import { Temporal } from "temporal-polyfill";
+import { AssertionError } from "../../src/typescript/modules/assert";
 import * as tasker from "../../src/typescript/modules/tasker";
 import { formatDateTime, isEnvTasker, isNullOrEmpty, readJsonData } from "../../src/typescript/modules/utils";
 
@@ -78,29 +79,23 @@ describe("utils", () => {
             expect(result.data).toStrictEqual(expectedJsonData);
         });
 
-        it("should exit if JSON file not found", () => {
+        it("should throw AssertionError and exit if JSON file not found", () => {
             // arrange
             vi.spyOn(tasker, "readFile").mockImplementation(() => "undefined");
             const taskerExit = vi.spyOn(tasker, "exit").mockImplementation(() => {});
 
-            // act
-            const result = readJsonData({ filename: "test.json" });
-
-            // assert
-            expect(result).toBeNull();
+            // act & assert
+            expect(() => { readJsonData({ filename: "test.json" }); }).toThrow(AssertionError);
             expect(taskerExit).toHaveBeenCalledTimes(1);
         });
 
-        it("should exit if JSON file is invalid", () => {
+        it("should throw SyntaxError and exit if JSON file is invalid", () => {
             // arrange
             vi.spyOn(tasker, "readFile").mockImplementation(() => "invalid JSON");
             const taskerExit = vi.spyOn(tasker, "exit").mockImplementation(() => {});
 
-            // act
-            const result = readJsonData({ filename: "test.json" });
-
-            // assert
-            expect(result).toBeNull();
+            // act & assert
+            expect(() => { readJsonData({ filename: "test.json" }); }).toThrow(SyntaxError);
             expect(taskerExit).toHaveBeenCalledTimes(1);
         });
 
@@ -127,15 +122,12 @@ describe("utils", () => {
             "14:49:23", // date required
             "2024-05-11 0:49:23", // leading 0 required for hour
             "05/11/2024 14:49:23", // invalid date format
-        ])("should exit and return null given invalid input string %s", (inputStr) => {
+        ])("should throw RangeError and exit given invalid input string %s", (inputStr) => {
             // arrange
             const taskerExit = vi.spyOn(tasker, "exit").mockImplementation(() => {});
 
-            // act
-            const result = formatDateTime(inputStr, "h:mm A");
-
-            // assert
-            expect(result).toBeNull();
+            // act & assert
+            expect(() => { formatDateTime(inputStr, "h:mm A"); }).toThrow(RangeError);
             expect(taskerExit).toHaveBeenCalledTimes(1);
         });
 

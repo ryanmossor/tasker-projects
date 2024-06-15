@@ -1,4 +1,4 @@
-import assert from "../modules/assert";
+import { assert } from "../modules/assert";
 import Http from "../modules/httpClient";
 import Logger from "../modules/logger";
 import * as tasker from "../modules/tasker";
