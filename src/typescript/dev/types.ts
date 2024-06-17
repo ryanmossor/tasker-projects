@@ -1,3 +1,6 @@
+/* eslint-disable camelcase */
+import { youtube_v3 } from "@googleapis/youtube";
+
 export type CheckinLists = {
     fullChecklist: string[];
     trackedActivities: string[];
@@ -148,3 +151,6 @@ export type LogParams = {
     properties?: Record<string, any>;
     funcName?: string;
 };
+
+export type PlaylistItem = youtube_v3.Schema$PlaylistItemListResponse;
+export type Playlist = youtube_v3.Schema$PlaylistListResponse;

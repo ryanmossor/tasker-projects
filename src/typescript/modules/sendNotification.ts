@@ -1,5 +1,5 @@
-import { NotificationPayload } from "../types/types";
-import * as tasker from "./tasker";
+import * as tasker from "../dev/tasker";
+import { NotificationPayload } from "../dev/types";
 
 export const notificationActions = {
     rewardsUi: "📅 Rewards UI",

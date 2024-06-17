@@ -1,7 +1,7 @@
+import * as tasker from "../dev/tasker";
+import { CheckinJson } from "../dev/types";
 import { notificationActions, sendNotification } from "../modules/sendNotification";
-import * as tasker from "../modules/tasker";
 import { capitalize, readJsonData } from "../modules/utils";
-import { CheckinJson } from "../types/types";
 
 const checkinJson = readJsonData<CheckinJson>({ filename: "checkin.json" });
 const reminderHabits = checkinJson.data.habits.filter((habit) => habit.reminderThreshold);

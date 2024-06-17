@@ -1,5 +1,5 @@
+import { CheckinFields, Habit } from "../../src/typescript/dev/types";
 import * as habitFunctions from "../../src/typescript/modules/habitFunctions";
-import { CheckinFields, Habit } from "../../src/typescript/types/types";
 
 describe("habitFunctions", () => {
     afterEach(() => {

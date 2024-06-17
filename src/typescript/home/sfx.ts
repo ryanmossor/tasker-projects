@@ -1,5 +1,5 @@
+import * as tasker from "../dev/tasker";
 import Logger from "../modules/logger";
-import * as tasker from "../modules/tasker";
 import { tryGetGlobal } from "../modules/utils";
 
 type SfxJson = {

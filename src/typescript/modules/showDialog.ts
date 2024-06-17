@@ -1,4 +1,4 @@
-import * as tasker from "./tasker";
+import * as tasker from "../dev/tasker";
 
 export function showTextDialog(dialogPayload: {
     title?: string;

@@ -1,6 +1,6 @@
-import * as tasker from "../modules/tasker";
+import * as tasker from "../dev/tasker";
+import { ExpensesJson } from "../dev/types";
 import { isEnvTasker, readJsonData, tryGetLocal, uniq } from "../modules/utils";
-import { ExpensesJson } from "../types/types";
 
 export function updateCategoriesVendors(expenseCategories: string[], existingVendors: string[], newVendors: string[]) {
     const expensesJson: ExpensesJson = {

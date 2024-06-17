@@ -1,8 +1,8 @@
 import { Temporal } from "temporal-polyfill";
+import * as tasker from "../dev/tasker";
+import { CheckinFields } from "../dev/types";
 import { CHECKIN_COLUMN_MAPPING } from "../modules/constants";
-import * as tasker from "../modules/tasker";
 import { formatDateTime } from "../modules/utils";
-import { CheckinFields } from "../types/types";
 
 const today = Temporal.Now.plainDateISO();
 

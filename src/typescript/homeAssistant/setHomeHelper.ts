@@ -1,6 +1,6 @@
+import * as tasker from "../dev/tasker";
 import Http from "../modules/httpClient";
 import Logger from "../modules/logger";
-import * as tasker from "../modules/tasker";
 import { isEnvTasker, tryGetGlobal, tryGetLocal } from "../modules/utils";
 
 async function toggleHome(state: "on" | "off"): Promise<void> {

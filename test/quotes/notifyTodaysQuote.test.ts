@@ -1,5 +1,5 @@
+import { QuotesJson } from "../../src/typescript/dev/types";
 import { notifyTodaysQuote } from "../../src/typescript/quotes/notifyTodaysQuote";
-import { QuotesJson } from "../../src/typescript/types/types";
 
 describe("notifyTodaysQuote", () => {
     it("returns correct quote and author if author is present", () => {

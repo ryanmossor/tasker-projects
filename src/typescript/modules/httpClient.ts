@@ -1,6 +1,6 @@
 import axios, { Method } from "axios";
+import * as tasker from "../dev/tasker";
 import Logger from "./logger";
-import * as tasker from "./tasker";
 import { isNullOrEmpty } from "./utils";
 
 class HttpError extends Error {

@@ -1,8 +1,8 @@
+import * as tasker from "../dev/tasker";
+import { CheckinJson, CheckinLists } from "../dev/types";
 import Http from "../modules/httpClient";
 import Logger from "../modules/logger";
-import * as tasker from "../modules/tasker";
 import { readJsonData, tryGetGlobal, tryGetLocal } from "../modules/utils";
-import { CheckinJson, CheckinLists } from "../types/types";
 
 const asteriskRegex = /(?<!\*)\*(?!\*)/g;
 

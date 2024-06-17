@@ -4,6 +4,7 @@ const mocks = {
 
     // global
     DARK_MODE: "1",
+    JSON_PATH: "/sdcard/Tasker/json",
 
     // local
     time_precision: "2",

@@ -1,5 +1,5 @@
+import { Habit } from "../../src/typescript/dev/types";
 import { _maybeAdjustTarget } from "../../src/typescript/modules/rewardFunctions";
-import { Habit } from "../../src/typescript/types/types";
 
 describe("rewardFunctions", () => {
     describe("_maybeAdjustTarget", () => {

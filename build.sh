@@ -128,17 +128,15 @@ while IFS= read -r file; do
 done <<< "$(find "${build_dir}/webviews" -type f \( -name "*.html" -o -name "*.js" \))"
 
 # Cleanup
-files_to_remove=(
-    "./typescript/modules/taskerMocks.js"
-    "./typescript/modules/tasker.js"
-    "./webviews/tasker.js"
-    "./webviews/typedefs.js"
-    "./webviews/mocks.js"
-)
 pushd "${build_dir}" > /dev/null || exit
-rm -f "${files_to_remove[@]}"
-rm -rf ./src ./typescript/types
 mv ./typescript ./javascript
+
+dirs_to_remove=(
+    "./javascript/dev"
+    "./webviews/dev"
+)
+
+rm -rf "${dirs_to_remove[@]}"
 popd > /dev/null || exit
 
 # Copy build if phone connected, otherwise copy to mock phone directory

@@ -1,5 +1,5 @@
 import { Temporal } from "temporal-polyfill";
-import { Habit, Reward } from "../types/types";
+import { Habit, Reward } from "../dev/types";
 import { capitalize, sample, shuffle, uniq } from "./utils";
 
 /**

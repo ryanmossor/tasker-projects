@@ -1,5 +1,5 @@
+import { QuotesJson } from "../dev/types";
 import { readJsonData, sample, shuffle } from "../modules/utils";
-import { QuotesJson } from "../types/types";
 
 const quotesJson = readJsonData<QuotesJson>({ filename: "quotes.json" });
 

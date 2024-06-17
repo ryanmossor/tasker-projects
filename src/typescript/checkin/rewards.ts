@@ -1,9 +1,9 @@
+import * as tasker from "../dev/tasker";
+import { CheckinJson } from "../dev/types";
 import Logger from "../modules/logger";
 import { chooseReward, countSuccessfulHabits, generateHabitScorecard } from "../modules/rewardFunctions";
 import { notificationActions, notificationIcons, sendNotification } from "../modules/sendNotification";
-import * as tasker from "../modules/tasker";
 import { isEnvTasker, readJsonData } from "../modules/utils";
-import { CheckinJson } from "../types/types";
 
 function processRewards() {
     try {

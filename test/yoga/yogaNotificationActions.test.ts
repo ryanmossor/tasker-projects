@@ -1,5 +1,5 @@
-import * as tasker from "../../src/typescript/modules/tasker";
-import { YogaJson } from "../../src/typescript/types/types";
+import * as tasker from "../../src/typescript/dev/tasker";
+import { YogaJson } from "../../src/typescript/dev/types";
 import { yogaNotificationActions } from "../../src/typescript/yoga/yogaNotificationActions";
 
 describe("yogaNotificationActions", () => {

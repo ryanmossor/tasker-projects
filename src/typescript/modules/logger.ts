@@ -1,7 +1,7 @@
 import { Temporal } from "temporal-polyfill";
-import { LogMessage, LogParams } from "../types/types";
+import * as tasker from "../dev/tasker";
+import { LogMessage, LogParams } from "../dev/types";
 import { notificationActions, notificationIcons, sendNotification } from "./sendNotification";
-import * as tasker from "./tasker";
 
 const LOG_LEVEL = {
     ERROR: 0,

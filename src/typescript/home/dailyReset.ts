@@ -1,9 +1,9 @@
+import * as tasker from "../dev/tasker";
+import { CheckinJson, CheckinQueueItem } from "../dev/types";
 import { habitsDailyReset, updateTrackedItemDates } from "../modules/habitFunctions";
 import Logger from "../modules/logger";
 import { rewardsDailyUpdate } from "../modules/rewardFunctions";
-import * as tasker from "../modules/tasker";
 import { readJsonData, tryGetGlobal } from "../modules/utils";
-import { CheckinJson, CheckinQueueItem } from "../types/types";
 
 const checkinJson = readJsonData<CheckinJson>({ filename: "checkin.json" });
 const queueJson = readJsonData<CheckinQueueItem[]>({ filename: "checkinQueue.json" });

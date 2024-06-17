@@ -1,6 +1,6 @@
-import * as tasker from "../modules/tasker";
+import * as tasker from "../dev/tasker";
+import { Quote, QuotesJson } from "../dev/types";
 import { isEnvTasker, isNullOrEmpty, readJsonData } from "../modules/utils";
-import { Quote, QuotesJson } from "../types/types";
 
 export function notifyTodaysQuote(quotesJson: QuotesJson) {
     const todaysQuote: Quote = quotesJson.daily.quotes.find((x) => x.id === quotesJson.daily.todaysQuoteId);

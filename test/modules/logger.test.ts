@@ -1,7 +1,7 @@
 import { Temporal } from "temporal-polyfill";
+import * as tasker from "../../src/typescript/dev/tasker";
 import Logger from "../../src/typescript/modules/logger";
 import { notificationActions, notificationIcons } from "../../src/typescript/modules/sendNotification";
-import * as tasker from "../../src/typescript/modules/tasker";
 
 const baseLogMessage = {
     task: "Test",

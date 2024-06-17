@@ -1,6 +1,6 @@
-import * as tasker from "../modules/tasker";
+import * as tasker from "../dev/tasker";
+import { YogaJson } from "../dev/types";
 import { isEnvTasker, readJsonData, tryGetLocal } from "../modules/utils";
-import { YogaJson } from "../types/types";
 
 export function yogaNotificationActions(actionType: string, yogaJsonData: YogaJson): void {
     if (actionType === "Yoga") {

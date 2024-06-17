@@ -1,6 +1,6 @@
+import * as tasker from "../dev/tasker";
 import Logger from "../modules/logger";
 import { BenchmarkStats, benchmark } from "../modules/metrics";
-import * as tasker from "../modules/tasker";
 import { isEnvTasker, isNullOrEmpty } from "../modules/utils";
 
 async function runBenchmarks() {

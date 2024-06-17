@@ -1,7 +1,7 @@
 import { Temporal } from "temporal-polyfill";
 import { parseTime, setSleepTime, updateSleepHabit } from "../../src/typescript/checkin/setSleepTime";
+import { CheckinQueueItem, Habit } from "../../src/typescript/dev/types";
 import * as utils from "../../src/typescript/modules/utils";
-import { CheckinQueueItem, Habit } from "../../src/typescript/types/types";
 
 const baseQueueJson: CheckinQueueItem[] = [{
     checkinFields: {

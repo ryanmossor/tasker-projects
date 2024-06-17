@@ -1,5 +1,5 @@
 import { Temporal } from "temporal-polyfill";
-import { CheckinQueueItem, Habit } from "../types/types";
+import { CheckinQueueItem, Habit } from "../dev/types";
 import { uniq } from "./utils";
 
 type HabitMapping = {

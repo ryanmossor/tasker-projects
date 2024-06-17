@@ -1,9 +1,8 @@
+import * as tasker from "../dev/tasker";
+import { Playlist, YogaJson } from "../dev/types";
 import Http from "../modules/httpClient";
 import Logger from "../modules/logger";
-import * as tasker from "../modules/tasker";
 import { isEnvTasker, readJsonData, tryGetGlobal, tryGetLocal } from "../modules/utils";
-import { YogaJson } from "../types/types";
-import { Playlist } from "../types/youtubeTypes";
 
 type PlaylistInfo = { playlistId: string, playlistTitle: string };
 

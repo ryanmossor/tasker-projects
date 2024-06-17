@@ -4,7 +4,7 @@
 import * as chalk from "chalk";
 import { readFileSync } from "fs";
 import * as process from "process";
-import { mocks } from "./taskerMocks";
+import { mocks } from "./mocks";
 
 const orange = chalk.hex("#FFA500");
 

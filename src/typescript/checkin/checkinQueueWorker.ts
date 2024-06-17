@@ -1,9 +1,9 @@
+import * as tasker from "../dev/tasker";
+import { CheckinApiResponse, CheckinQueueItem } from "../dev/types";
 import { assert } from "../modules/assert";
 import Http from "../modules/httpClient";
 import Logger from "../modules/logger";
-import * as tasker from "../modules/tasker";
 import { isEnvTasker, readJsonData, tryGetGlobal } from "../modules/utils";
-import { CheckinApiResponse, CheckinQueueItem } from "../types/types";
 
 async function processCheckinQueue() {
     try {

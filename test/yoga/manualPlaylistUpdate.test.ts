@@ -1,5 +1,5 @@
+import { Playlist } from "../../src/typescript/dev/types";
 import Http from "../../src/typescript/modules/httpClient";
-import { Playlist } from "../../src/typescript/types/youtubeTypes";
 import { getPlaylistTitleAndId } from "../../src/typescript/yoga/manualPlaylistUpdate";
 
 describe("getPlaylistTitleAndId", () => {

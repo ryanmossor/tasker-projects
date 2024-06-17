@@ -1,5 +1,5 @@
+import { YogaJson } from "../../src/typescript/dev/types";
 import Http from "../../src/typescript/modules/httpClient";
-import { YogaJson } from "../../src/typescript/types/types";
 import { Playlist } from "../../src/typescript/types/youtubeTypes";
 import { getLatestPlaylist, updatePlaylistData } from "../../src/typescript/yoga/getLatestPlaylist";
 
