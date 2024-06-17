@@ -1,10 +1,10 @@
 [
     {
         "checkinFields": {
-            "spreadsheetName": "[Tasker] 2023 Daily Tracker",
-            "date": "2023-09-18",
-            "month": "Sep",
-            "cellReference": "G1"
+            "spreadsheetName": "[Tasker] 2024 Daily Tracker",
+            "date": "2024-06-16",
+            "month": "Jun",
+            "cellReference": "R1"
         },
         "formResponse": {
             "Journal": "1",
@@ -33,42 +33,9 @@
             "Open window": "1",
             "Screens <1hr before bed": "1",
             "White noise": "1",
-            "Bedtime": "8:45:00 PM",
-            "Wake-up time": "5:02:00 AM",
+            "Bedtime": "08:45:00 PM",
+            "Wake-up time": "05:32:00 AM",
             "Total Time in Bed": "8:47"
-        },
-        "getWeight": true
-    },
-    {
-        "checkinFields": {
-            "spreadsheetName": "[Tasker] 2023 Daily Tracker",
-            "date": "2023-09-17",
-            "month": "Sep",
-            "cellReference": "H1"
-        },
-        "formResponse": {
-            "Journal": "1",
-            "Meditation": "1",
-            "Morning sunlight": "1",
-            "Lifting": "1",
-            "Run": "1",
-            "Yoga": "1",
-            "Sauna": "1",
-            "Work from home": "1",
-            "Aller-Clear": "1",
-            "Aller-Flo": "1",
-            "Creatine": "1",
-            "Fish oil": "1",
-            "Mangesium Glycinate": "1",
-            "Vitamin C": "1",
-            "Vitamin D3": "1",
-            "Overall Mood": "4",
-            "Irritability": "1",
-            "Productivity": "4",
-            "Sense of Control": "3",
-            "Sense of Purpose": "4",
-            "Stress": "2",
-            "Alcohol": "3"
         },
         "getWeight": true
     }

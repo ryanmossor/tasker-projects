@@ -37,10 +37,7 @@ async function processCheckinQueue() {
         }
 
         const time = ((performance.now() - start) / 1000).toFixed(2);
-        Logger.info({
-            message: `Processed ${response.results.length} item(s) in ${time} seconds`,
-            funcName: processCheckinQueue.name,
-        });
+        Logger.info({ message: `Processed ${response.results.length} check-in queue item(s) in ${time} seconds` });
 
         tasker.setGlobal("CHECKIN_QUEUE_READY", null);
     } catch (error) {

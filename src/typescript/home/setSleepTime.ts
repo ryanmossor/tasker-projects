@@ -6,40 +6,66 @@ import { formatDateTime, isEnvTasker, readJsonData, tryGetGlobal, tryGetLocal } 
 import { CheckinFields, CheckinJson, CheckinQueueItem, Habit } from "../types/types";
 
 /**
- * Updates `lastDate` and `pastWeek` properties of `sleepHabit` object if sleep target was met
+ * @param formattedTime - Formatted as `hh:mm:ss A` from check-in queue item
+ * @returns Time formatted as `HH:mm:ss`
+ */
+export function parseTime(formattedTime: string) {
+    const time = formattedTime.split(" ")[0];
+    const hour = Number(formattedTime.substring(0, 2));
+
+    if (hour < 12 && formattedTime.endsWith("PM")) {
+        return `${hour + 12}${time.substring(2)}`;
+    }
+
+    return formattedTime.split(" ")[0];
+}
+
+/**
+ * Updates `lastDate` and `pastWeek` properties of `sleepHabit` object if sleep target(s) met
  * @param sleepHabit - {@link Habit} object where `name` is `"sleep"`
- * @param checkinDate - `YYYY-MM-DD` format
- * @param targetStartTime - Formatted as `HH:mm`
- * @param targetEndTime - Formatted as `HH:mm`
+ * @param queueItem - Today's {@link CheckinQueueItem}
+ * @param targetBedtime - Formatted as `HH:mm`
+ * @param targetWakeTime - Formatted as `HH:mm`
  * @param startOrEnd - Valid values: `'Start'`, `'End'`
- * @param now - Current time as {@link Temporal.ZonedDateTime}
+ * @param required - Number of target sleep times required for success. `1` for start OR end, `2` for start AND end
  * @returns `sleepHabit` object with `lastDate` and `pastWeek` properties updated, if sleep target met
  */
-export function updateSleepHabit({ sleepHabit, checkinDate, targetStartTime, targetEndTime, startOrEnd, now }: {
+export function updateSleepHabit({ sleepHabit, queueItem, targetBedtime, targetWakeTime, startOrEnd, required }: {
     sleepHabit: Habit,
-    checkinDate: string,
-    targetStartTime: string,
-    targetEndTime: string,
+    queueItem: CheckinQueueItem,
+    targetBedtime: string,
+    targetWakeTime: string,
     startOrEnd: "Start" | "End",
-    now: Temporal.ZonedDateTime,
+    required: number,
 }): Habit {
-    if (sleepHabit.pastWeek.includes(checkinDate)) {
+    const checkinDate = queueItem.checkinFields.date;
+
+    if ((required === 2 && startOrEnd === "Start") || sleepHabit.pastWeek.includes(checkinDate)) {
         return sleepHabit;
     }
 
-    let isBeforeTargetStart = false;
-    let isBeforeTargetEnd = false;
+    const bedtime = queueItem.formResponse.Bedtime;
+    const actualBedtime = Temporal.PlainDateTime.from(`${checkinDate} ${parseTime(bedtime)}`);
+    const targetBedtimeDt = Temporal.PlainDateTime.from(`${checkinDate} ${targetBedtime}:00`);
 
-    if (startOrEnd === "Start") {
-        const targetStart = Temporal.PlainDateTime.from(`${checkinDate} ${targetStartTime}:00`);
-        isBeforeTargetStart = Temporal.PlainDateTime.compare(now.toPlainDateTime(), targetStart) === -1;
-    } else {
-        const checkinNextMorning = Temporal.PlainDate.from(checkinDate).add({ days: 1 });
-        const targetEnd = Temporal.PlainDateTime.from(`${checkinNextMorning} ${targetEndTime}:00`);
-        isBeforeTargetEnd = Temporal.PlainDateTime.compare(now.toPlainDateTime(), targetEnd) === -1;
+    let successCount = 0;
+    if (Temporal.PlainDateTime.compare(actualBedtime, targetBedtimeDt) === -1) {
+        successCount += 1;
     }
 
-    if (isBeforeTargetStart || isBeforeTargetEnd) {
+    if (startOrEnd === "End") {
+        const checkinNextMorning = Temporal.PlainDate.from(checkinDate).add({ days: 1 });
+
+        const wakeTime = queueItem.formResponse["Wake-up time"];
+        const actualWakeTime = Temporal.PlainDateTime.from(`${checkinNextMorning} ${parseTime(wakeTime)}`);
+        const targetWakeTimeDt = Temporal.PlainDateTime.from(`${checkinNextMorning} ${targetWakeTime}:00`);
+
+        if (Temporal.PlainDateTime.compare(actualWakeTime, targetWakeTimeDt) === -1) {
+            successCount += 1;
+        }
+    }
+
+    if (successCount >= required) {
         sleepHabit.lastDate = checkinDate;
         sleepHabit.pastWeek.push(checkinDate);
     }
@@ -48,31 +74,28 @@ export function updateSleepHabit({ sleepHabit, checkinDate, targetStartTime, tar
 }
 
 /**
- * Sets unix and formatted (`h:mm:00 A`) times for start or end of sleep, based on value passed to `startOrEnd` parameter.
+ * Sets unix and formatted (`hh:mm:00 A`) times for start or end of sleep, based on value passed to `startOrEnd` parameter.
  * @param queueItem - {@link CheckinQueueItem} to be modified
- * @param checkinDate - `YYYY-MM-DD` format
  * @param startOrEnd - Valid values: `'Start'`, `'End'`
  * @param now - Current time as {@link Temporal.ZonedDateTime}
  * @returns `queueItem` with sleep start or end time updated
  */
-export function setSleepTime({ queueItem, checkinDate, startOrEnd, now }: {
+export function setSleepTime({ queueItem, startOrEnd, now }: {
     queueItem: CheckinQueueItem,
-    checkinDate: string,
     startOrEnd: "Start" | "End",
     now: Temporal.ZonedDateTime,
 }): CheckinQueueItem {
     try {
         assert(startOrEnd === "Start" || startOrEnd === "End", "par1 must be Start or End");
-        assert(queueItem != null, `No queue item found for ${checkinDate}`);
-        assert(queueItem[`sleep${startOrEnd}`] == null, `sleep${startOrEnd} time already exists for ${checkinDate}`);
+        assert(queueItem != null, "Queue item must not be null");
+        assert(queueItem[`sleep${startOrEnd}`] == null, `sleep${startOrEnd} time already exists for date`);
 
-        const formatted = formatDateTime(now, "h:mm:00 A");
+        const formatted = formatDateTime(now, "hh:mm:00 A");
         const unix = now.epochSeconds;
 
         Logger.info({
             message: `Set sleep${startOrEnd} time to ${formatted} (unix: ${unix})`,
             logFile: `/sdcard/Tasker/log/sleep/${now.toPlainYearMonth()}.txt`,
-            funcName: setSleepTime.name,
         });
 
         if (startOrEnd === "Start") {
@@ -101,7 +124,7 @@ if (isEnvTasker()) {
         let queueItem = queueJson.data.find((x) => x.checkinFields.date === checkinDate);
 
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        queueItem = setSleepTime({ checkinDate, queueItem, startOrEnd, now });
+        queueItem = setSleepTime({ queueItem, startOrEnd, now });
         queueJson.save();
 
         const checkinJson = readJsonData<CheckinJson>({ filename: "checkin.json" });
@@ -110,12 +133,13 @@ if (isEnvTasker()) {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         sleepHabit = updateSleepHabit({
             sleepHabit,
-            checkinDate,
-            targetStartTime: tryGetGlobal("SLEEP_START_TARGET"),
-            targetEndTime: tryGetGlobal("SLEEP_END_TARGET"),
+            queueItem,
+            targetBedtime: tryGetGlobal("TARGET_BEDTIME"),
+            targetWakeTime: tryGetGlobal("TARGET_WAKE_TIME"),
             startOrEnd,
-            now,
+            required: Number(tryGetGlobal("SLEEP_TARGETS_REQUIRED") ?? 2),
         });
+
         checkinJson.save();
     } catch (error) {
         Logger.error({ message: error });
