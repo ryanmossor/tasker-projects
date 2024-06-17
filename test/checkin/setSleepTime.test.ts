@@ -1,5 +1,5 @@
 import { Temporal } from "temporal-polyfill";
-import { parseTime, setSleepTime, updateSleepHabit } from "../../src/typescript/home/setSleepTime";
+import { parseTime, setSleepTime, updateSleepHabit } from "../../src/typescript/checkin/setSleepTime";
 import * as utils from "../../src/typescript/modules/utils";
 import { CheckinQueueItem, Habit } from "../../src/typescript/types/types";
 
