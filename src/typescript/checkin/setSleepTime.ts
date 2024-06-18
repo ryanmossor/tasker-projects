@@ -30,13 +30,14 @@ export function parseTime(formattedTime: string) {
  * @param required - Number of target sleep times required for success. `1` for start OR end, `2` for start AND end
  * @returns `sleepHabit` object with `lastDate` and `pastWeek` properties updated, if sleep target met
  */
-export function updateSleepHabit({ sleepHabit, queueItem, targetBedtime, targetWakeTime, startOrEnd, required }: {
+export function updateSleepHabit({ sleepHabit, queueItem, targetBedtime, targetWakeTime, startOrEnd, required, now }: {
     sleepHabit: Habit,
     queueItem: CheckinQueueItem,
     targetBedtime: string,
     targetWakeTime: string,
     startOrEnd: "Start" | "End",
     required: number,
+    now: Temporal.ZonedDateTime,
 }): Habit {
     const checkinDate = queueItem.checkinFields.date;
 
@@ -44,8 +45,8 @@ export function updateSleepHabit({ sleepHabit, queueItem, targetBedtime, targetW
         return sleepHabit;
     }
 
-    const bedtime = queueItem.formResponse.Bedtime;
-    const actualBedtime = Temporal.PlainDateTime.from(`${checkinDate} ${parseTime(bedtime)}`);
+    const bedtimeFormatted = parseTime(queueItem.formResponse.Bedtime);
+    const actualBedtime = Temporal.PlainDateTime.from(`${now.toPlainDate()} ${bedtimeFormatted}`);
     const targetBedtimeDt = Temporal.PlainDateTime.from(`${checkinDate} ${targetBedtime}:00`);
 
     let successCount = 0;
@@ -54,10 +55,10 @@ export function updateSleepHabit({ sleepHabit, queueItem, targetBedtime, targetW
     }
 
     if (startOrEnd === "End") {
-        const checkinNextMorning = Temporal.PlainDate.from(checkinDate).add({ days: 1 });
+        const wakeTimeFormatted = parseTime(queueItem.formResponse["Wake-up time"]);
+        const actualWakeTime = Temporal.PlainDateTime.from(`${now.toPlainDate()} ${wakeTimeFormatted}`);
 
-        const wakeTime = queueItem.formResponse["Wake-up time"];
-        const actualWakeTime = Temporal.PlainDateTime.from(`${checkinNextMorning} ${parseTime(wakeTime)}`);
+        const checkinNextMorning = Temporal.PlainDate.from(checkinDate).add({ days: 1 });
         const targetWakeTimeDt = Temporal.PlainDateTime.from(`${checkinNextMorning} ${targetWakeTime}:00`);
 
         if (Temporal.PlainDateTime.compare(actualWakeTime, targetWakeTimeDt) === -1) {
@@ -138,6 +139,7 @@ if (isEnvTasker()) {
             targetWakeTime: tryGetGlobal("TARGET_WAKE_TIME"),
             startOrEnd,
             required: Number(tryGetGlobal("SLEEP_TARGETS_REQUIRED") ?? 2),
+            now,
         });
 
         checkinJson.save();
