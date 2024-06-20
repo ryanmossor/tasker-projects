@@ -183,160 +183,28 @@ describe("habitFunctions", () => {
     });
 
     describe("updateDate", () => {
-        it("should add new habit object to habitsArr if it doesn't already exist", () => {
+        it("should update properties for habit", () => {
             // arrange
-            const habitsArr = [];
-            const habitName = "cardio";
+            const habit = {
+                name: "journal",
+                lastDate: "2023-08-25",
+                pastWeek: ["2023-08-25"],
+                daysSince: 3,
+            };
             const today = "2023-08-26";
 
-            const expected = [
-                {
-                    name: habitName,
-                    lastDate: today,
-                    pastWeek: [today],
-                    daysSince: 0,
-                },
-            ];
+            const expected = {
+                name: habit.name,
+                lastDate: today,
+                pastWeek: ["2023-08-25", today],
+                daysSince: 0,
+            };
 
             // act
-            const result = habitFunctions.updateDate(habitsArr, habitName, today);
+            const result = habitFunctions.updateLastHabitDate(habit, today);
 
             // assert
             expect(result).toEqual(expected);
-        });
-
-        it("should update properties for existing habit", () => {
-            // arrange
-            const habitsArr = [
-                {
-                    name: "journal",
-                    lastDate: "2023-08-25",
-                    pastWeek: ["2023-08-25"],
-                    daysSince: 3,
-                },
-            ];
-            const habitName = "journal";
-            const today = "2023-08-26";
-
-            const expected = [
-                {
-                    name: habitName,
-                    lastDate: today,
-                    pastWeek: ["2023-08-25", today],
-                    daysSince: 0,
-                },
-            ];
-
-            // act
-            const result = habitFunctions.updateDate(habitsArr, habitName, today);
-
-            // assert
-            expect(result).toEqual(expected);
-        });
-    });
-
-    describe("_generateTrackedHabitMapping", () => {
-        it("should not add untracked habits to mapping", () => {
-            // arrange
-            const habits: Habit[] = [
-                {
-                    name: "habit1",
-                    daysSince: 1,
-                    lastDate: "2023-08-25",
-                    pastWeek: ["2023-08-25"],
-                },
-            ];
-
-            // act
-            const result = habitFunctions._generateTrackedHabitMapping(habits);
-
-            // assert
-            expect(result).toEqual({});
-        });
-
-        it("should add tracked habits with no types to mapping", () => {
-            // arrange
-            const habits: Habit[] = [
-                {
-                    name: "habit1",
-                    tracked: true,
-                    daysSince: 1,
-                    lastDate: "2023-08-25",
-                    pastWeek: ["2023-08-25"],
-                },
-            ];
-
-            const expectedMapping = {
-                habit1: { types: [] },
-            };
-
-            // act
-            const result = habitFunctions._generateTrackedHabitMapping(habits);
-
-            // assert
-            expect(result).toEqual(expectedMapping);
-        });
-
-        it("should add tracked habits with types to mapping", () => {
-            // arrange
-            const habits: Habit[] = [
-                {
-                    name: "habit1",
-                    tracked: true,
-                    daysSince: 1,
-                    lastDate: "2023-08-25",
-                    pastWeek: ["2023-08-25"],
-                    types: ["type1", "type2"],
-                },
-            ];
-
-            const expectedMapping = {
-                habit1: { types: habits[0].types },
-            };
-
-            // act
-            const result = habitFunctions._generateTrackedHabitMapping(habits);
-
-            // assert
-            expect(result).toEqual(expectedMapping);
-        });
-
-        it("should add only tracked habits from arr with both tracked and untracked habits", () => {
-            // arrange
-            const habits: Habit[] = [
-                {
-                    name: "habit1",
-                    tracked: true,
-                    daysSince: 1,
-                    lastDate: "2023-08-25",
-                    pastWeek: ["2023-08-25"],
-                    types: ["type1", "type2"],
-                },
-                {
-                    name: "habit2",
-                    tracked: true,
-                    daysSince: 1,
-                    lastDate: "2023-08-25",
-                    pastWeek: ["2023-08-25"],
-                },
-                {
-                    name: "habit3",
-                    daysSince: 1,
-                    lastDate: "2023-08-25",
-                    pastWeek: ["2023-08-25"],
-                },
-            ];
-
-            const expectedMapping = {
-                habit1: { types: habits[0].types },
-                habit2: { types: [] },
-            };
-
-            // act
-            const result = habitFunctions._generateTrackedHabitMapping(habits);
-
-            // assert
-            expect(result).toEqual(expectedMapping);
         });
     });
 
@@ -345,14 +213,12 @@ describe("habitFunctions", () => {
         const habitsArr: Habit[] = [
             {
                 name: "tracked habit 1",
-                tracked: true,
                 daysSince: 99,
                 lastDate: "2023-01-01",
                 pastWeek: [],
             },
             {
                 name: "tracked habit 2",
-                tracked: true,
                 daysSince: 99,
                 lastDate: "2023-01-01",
                 pastWeek: [],

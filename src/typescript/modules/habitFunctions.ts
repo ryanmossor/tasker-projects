@@ -2,12 +2,6 @@ import { Temporal } from "temporal-polyfill";
 import { CheckinQueueItem, Habit } from "../dev/types";
 import { uniq } from "./utils";
 
-type HabitMapping = {
-    [index: string]: {
-        types: string[];
-    }
-};
-
 /** Calculates days since a habit was last completed. Dates formatted as `YYYY-MM-DD`.  */
 export function _calcDaysSince(activityDate: string, today: string): number {
     const daysSince: number = Temporal.PlainDate.from(today).since(Temporal.PlainDate.from(activityDate)).days;
@@ -46,56 +40,33 @@ export function habitsDailyReset(habitsArr: Habit[]): Habit[] {
 }
 
 /**
- * Updates the `lastDate` and `pastWeek` properties of a habit object in `habitsArr` for the given `habitName`.\
- * Creates a new habit object if it doesn't already exist. Dates formatted as `YYYY-MM-DD`.
+ * Updates the `daysSince`, `lastDate`, and `pastWeek` properties of a habit object.
+ * @param habit
+ * @param date - Formatted as `YYYY-MM-DD`
+ * @returns Habit object with `daysSince`, `lastDate`, and `pastWeek` properties updated
  */
-export function updateDate(habitsArr: Habit[], habitName: string, today: string): Habit[] {
-    const updatedHabitsArr: Habit[] = structuredClone(habitsArr);
-    let habit = updatedHabitsArr.find((x) => x.name === habitName);
-
-    if (habit == null) {
-        habit = { name: habitName, pastWeek: [] } as Habit;
-        updatedHabitsArr.push(habit);
-    }
-
-    habit.lastDate = today;
+export function updateLastHabitDate(habit: Habit, date: string): Habit {
     habit.daysSince = 0;
-    habit.pastWeek.push(today);
+    habit.lastDate = date;
+    habit.pastWeek.push(date);
 
-    return updatedHabitsArr;
+    return habit;
 }
 
-export function _generateTrackedHabitMapping(habitsArr: Habit[]): HabitMapping {
-    const habitsMapping: HabitMapping = {};
-
-    habitsArr.forEach((habit: Habit) => {
-        if (habit.tracked != null) {
-            habitsMapping[habit.name] = { types: habit.types ?? [] };
-        }
-    });
-
-    return habitsMapping;
-}
-
-/** Calls `updateDate()` for tracked items (workouts, sick/injured, reminder items, etc.). Dates formatted as `YYYY-MM-DD`. */
+/**
+ * Calls `updateLastHabitDate()` for tracked `Habit` objects.
+ * @returns Habits array with updated dates for tracked items
+ */
 export function updateTrackedItemDates(queueItem: CheckinQueueItem, habitsArr: Habit[]): Habit[] {
-    let updatedHabitsArr: Habit[] = structuredClone(habitsArr);
-    const habitsMapping: HabitMapping = _generateTrackedHabitMapping(updatedHabitsArr);
+    const updatedHabitsArr: Habit[] = structuredClone(habitsArr);
 
-    const checkedItemsLowercase: string[] = Object.entries(queueItem.formResponse)
-        .filter(([, value]) => value != null)
-        .map(([key]) => key.toLowerCase());
+    const checkedItemsLowercase: string[] = Object.keys(queueItem.formResponse)
+        .map((key) => key.toLowerCase());
 
     for (const item of checkedItemsLowercase) {
-        if (habitsMapping[item]) {
-            updatedHabitsArr = updateDate(updatedHabitsArr, item, queueItem.checkinFields.date);
-            continue;
-        }
-
-        for (const habitName in habitsMapping) {
-            if (habitsMapping[habitName].types.includes(item)) {
-                updatedHabitsArr = updateDate(updatedHabitsArr, habitName, queueItem.checkinFields.date);
-            }
+        let habit = updatedHabitsArr.find((h) => h.name === item || h.types?.includes(item));
+        if (habit != null) {
+            habit = updateLastHabitDate(habit, queueItem.checkinFields.date);
         }
     }
 

@@ -2,6 +2,7 @@ import { Temporal } from "temporal-polyfill";
 import * as tasker from "../dev/tasker";
 import { CheckinFields, CheckinJson, CheckinQueueItem, Habit } from "../dev/types";
 import { assert } from "../modules/assert";
+import { updateLastHabitDate } from "../modules/habitFunctions";
 import Logger from "../modules/logger";
 import { formatDateTime, isEnvTasker, readJsonData, tryGetGlobal, tryGetLocal } from "../modules/utils";
 
@@ -28,6 +29,7 @@ export function parseTime(formattedTime: string) {
  * @param targetWakeTime - Formatted as `HH:mm`
  * @param startOrEnd - Valid values: `'Start'`, `'End'`
  * @param required - Number of target sleep times required for success. `1` for start OR end, `2` for start AND end
+ * @param now - Current time as {@link Temporal.ZonedDateTime}
  * @returns `sleepHabit` object with `lastDate` and `pastWeek` properties updated, if sleep target met
  */
 export function updateSleepHabit({ sleepHabit, queueItem, targetBedtime, targetWakeTime, startOrEnd, required, now }: {
@@ -46,7 +48,7 @@ export function updateSleepHabit({ sleepHabit, queueItem, targetBedtime, targetW
     }
 
     const bedtimeFormatted = parseTime(queueItem.formResponse.Bedtime);
-    const actualBedtime = Temporal.PlainDateTime.from(`${now.toPlainDate()} ${bedtimeFormatted}`);
+    const actualBedtime = Temporal.PlainDateTime.from(`${checkinDate} ${bedtimeFormatted}`);
     const targetBedtimeDt = Temporal.PlainDateTime.from(`${checkinDate} ${targetBedtime}:00`);
 
     let successCount = 0;
@@ -67,8 +69,7 @@ export function updateSleepHabit({ sleepHabit, queueItem, targetBedtime, targetW
     }
 
     if (successCount >= required) {
-        sleepHabit.lastDate = checkinDate;
-        sleepHabit.pastWeek.push(checkinDate);
+        return updateLastHabitDate(sleepHabit, checkinDate);
     }
 
     return sleepHabit;

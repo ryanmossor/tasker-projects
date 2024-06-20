@@ -43,7 +43,6 @@ export type Habit = {
     avoid?: boolean;
     reminderText?: string;
     reminderThreshold?: number;
-    tracked?: boolean;
     types?: string[];
     weeklyTarget?: number;
 };
