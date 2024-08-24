@@ -2,12 +2,12 @@ import { Temporal } from "temporal-polyfill";
 import * as tasker from "../dev/tasker";
 import Http from "../modules/httpClient";
 import Logger from "../modules/logger";
-import { isEnvTasker, tryGetGlobal } from "../modules/utils";
+import { formatDateTime, isEnvTasker, tryGetGlobal } from "../modules/utils";
 
 async function updateAlarmTime(): Promise<void> {
     const alarmTime = Temporal.Now.plainDateTimeISO().add({ minutes: 50 });
     const body = {
-        "state": alarmTime.toString().replace("T", " "), // remove the "T" in YYYY-MM-DDTHH:mm:ss
+        "state": formatDateTime(alarmTime, "YYYY-MM-DD HH:mm:ss"),
         "attributes": {
             "has_date": true,
             "has_time": true,
