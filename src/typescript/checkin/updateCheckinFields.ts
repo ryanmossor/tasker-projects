@@ -2,9 +2,10 @@ import { Temporal } from "temporal-polyfill";
 import * as tasker from "../dev/tasker";
 import { CheckinFields } from "../dev/types";
 import { CHECKIN_COLUMN_MAPPING } from "../modules/constants";
-import { formatDateTime } from "../modules/utils";
+import { formatDateTime, tryGetGlobal } from "../modules/utils";
 
-const today = Temporal.Now.plainDateISO();
+const prevDate = (JSON.parse(tryGetGlobal("CHECKIN_FIELDS")) as CheckinFields).date;
+const today = Temporal.PlainDate.from(prevDate).add({ days: 1 });
 
 const checkinFields: CheckinFields = {
     spreadsheetName: `[Tasker] ${today.year} Daily Tracker`,

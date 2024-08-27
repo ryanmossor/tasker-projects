@@ -28,10 +28,11 @@ export const mocks = {
 
     CHECKIN_FIELDS: JSON.stringify({
         "spreadsheetName": "[Tasker] 2024 Daily Tracker",
-        "date": "2024-06-17",
-        "month": "Jun",
-        "cellReference": "S1",
+        "date": "2024-08-27",
+        "month": "Aug",
+        "cellReference": "AC1",
     }),
+    CHECKIN_FIELDS_SET: "",
 
     TARGET_BEDTIME: "21:30",
     TARGET_WAKE_TIME: "05:30",

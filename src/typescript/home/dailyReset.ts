@@ -1,5 +1,5 @@
 import * as tasker from "../dev/tasker";
-import { CheckinJson, CheckinQueueItem } from "../dev/types";
+import { CheckinFields, CheckinJson, CheckinQueueItem } from "../dev/types";
 import { habitsDailyReset, updateTrackedItemDates } from "../modules/habitFunctions";
 import Logger from "../modules/logger";
 import { rewardsDailyUpdate } from "../modules/rewardFunctions";
@@ -7,7 +7,7 @@ import { readJsonData, tryGetGlobal } from "../modules/utils";
 
 const checkinJson = readJsonData<CheckinJson>({ filename: "checkin.json" });
 const queueJson = readJsonData<CheckinQueueItem[]>({ filename: "checkinQueue.json" });
-const checkinFields = JSON.parse(tryGetGlobal("CHECKIN_FIELDS"));
+const checkinFields: CheckinFields = JSON.parse(tryGetGlobal("CHECKIN_FIELDS"));
 const queueItem = queueJson.data.find((item) => item.checkinFields.date === checkinFields.date);
 
 if (queueItem != null) {
