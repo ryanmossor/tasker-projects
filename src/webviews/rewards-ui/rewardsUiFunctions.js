@@ -107,7 +107,7 @@ function submitResults() {
 
 try {
     const mainDiv = document.getElementById("reward-items");
-    const realRewards = rewardsJson.rewardList.filter((x) => x.name !== "blank");
+    const realRewards = rewardsJson.rewardList.filter((x) => x.name !== "blank" && x.weight > 0);
     for (const i in realRewards) {
         mainDiv.innerHTML += $RewardRow(realRewards[i]);
     }
