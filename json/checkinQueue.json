@@ -2,9 +2,9 @@
     {
         "checkinFields": {
             "spreadsheetName": "[Tasker] 2024 Daily Tracker",
-            "date": "2024-06-16",
-            "month": "Jun",
-            "cellReference": "R1"
+            "date": "2024-09-03",
+            "month": "Sep",
+            "cellReference": "E1"
         },
         "formResponse": {
             "Journal": "1",

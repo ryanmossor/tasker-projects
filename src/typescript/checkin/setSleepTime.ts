@@ -48,7 +48,7 @@ export function updateSleepHabit({ sleepHabit, queueItem, targetBedtime, targetW
     }
 
     const bedtimeFormatted = parseTime(queueItem.formResponse.Bedtime);
-    const actualBedtime = Temporal.PlainDateTime.from(`${checkinDate} ${bedtimeFormatted}`);
+    const actualBedtime = Temporal.PlainDateTime.from(`${now.toPlainDate()} ${bedtimeFormatted}`);
     const targetBedtimeDt = Temporal.PlainDateTime.from(`${checkinDate} ${targetBedtime}:00`);
 
     let successCount = 0;

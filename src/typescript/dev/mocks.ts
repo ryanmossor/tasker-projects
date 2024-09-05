@@ -28,9 +28,9 @@ export const mocks = {
 
     CHECKIN_FIELDS: JSON.stringify({
         "spreadsheetName": "[Tasker] 2024 Daily Tracker",
-        "date": "2024-08-27",
-        "month": "Aug",
-        "cellReference": "AC1",
+        "date": "2024-09-03",
+        "month": "Sep",
+        "cellReference": "E1",
     }),
     CHECKIN_FIELDS_SET: "",
 
