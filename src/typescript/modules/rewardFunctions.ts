@@ -154,6 +154,10 @@ export function generateHabitScorecard(habitsArr: Habit[], successCount: number,
     return `${scorecard}\n\n${totalScore}`;
 }
 
+function _resetRewardPool(rewardList: Reward[]): Reward[] {
+    return rewardList.map((obj) => ({ ...obj, timesAppeared: 0 }));
+}
+
 /**
  * Updates `weight` property of `blank` reward such that 1/3 of items in starting pool are rewards and 2/3 are blank.
  * Also resets reward pool if the only remaining rewards are `blank` or if all non-blank rewards have appeared.
@@ -161,7 +165,7 @@ export function generateHabitScorecard(habitsArr: Habit[], successCount: number,
  * @returns Array of {@link Reward} objects with updated `weight` for `blank` reward and reset `timesAppeared`, if applicable
  */
 export function rewardsDailyUpdate(rewardList: Reward[]): Reward[] {
-    let updatedRewardList = rewardList;
+    let updatedRewardList = rewardList.filter((reward) => reward.weight > 0);
 
     // Update weight of 'blank' such that 1/3 of items in pool are rewards
     const blankWeight = updatedRewardList
@@ -170,7 +174,11 @@ export function rewardsDailyUpdate(rewardList: Reward[]): Reward[] {
     const blankReward = updatedRewardList.find((reward) => reward.name === "blank")!;
     blankReward.weight = blankWeight * 2;
 
-    const availableRewardNames: string[] = _filterAvailableRewards(rewardList);
+    if (updatedRewardList.some((r) => r.timesAppeared > r.weight)) {
+        updatedRewardList = _resetRewardPool(updatedRewardList);
+    }
+
+    const availableRewardNames: string[] = _filterAvailableRewards(updatedRewardList);
     const uniqueRewardNames: string[] = uniq(availableRewardNames);
 
     const onlyBlankRewardsRemain: boolean = uniqueRewardNames.length === 1 && uniqueRewardNames[0] === "blank";
@@ -178,7 +186,7 @@ export function rewardsDailyUpdate(rewardList: Reward[]): Reward[] {
 
     // Reset pool if all non-blank rewards have appeared
     if (onlyBlankRewardsRemain || allRewardsHaveAppeared) {
-        updatedRewardList = updatedRewardList.map((obj) => ({ ...obj, timesAppeared: 0 }));
+        updatedRewardList = _resetRewardPool(updatedRewardList);
     }
 
     return updatedRewardList;
