@@ -116,7 +116,7 @@ function insertSymbol(inputId, symbol) {
 
 function submitResults() {
     try {
-        const vlookupFormula = "=VLOOKUP(INDIRECT(ADDRESS(ROW(), COLUMN()-1, 4)), categories!$B$2:$C$102, 2, FALSE)";
+        const vlookupFormula = "=IFERROR(VLOOKUP(INDIRECT(ADDRESS(ROW(), COLUMN()-1, 4)), categories!$B$2:$C$102, 2, FALSE), \"\")";
         let results = "";
 
         for (let i = 0; i < totalExpenseFormCounter; i++) {
