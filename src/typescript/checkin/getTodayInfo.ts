@@ -1,7 +1,7 @@
 import { Temporal } from "temporal-polyfill";
 import * as tasker from "../dev/tasker";
 import { CHECKIN_COLUMN_MAPPING } from "../modules/constants";
-import { formatDateTime, isEnvTasker } from "../modules/utils";
+import { formatDateTime, isEnvTasker, tryGetGlobal } from "../modules/utils";
 
 export type TodayInfo = {
     daysInMonth: number;
@@ -9,7 +9,7 @@ export type TodayInfo = {
     monthAbbr: string;
     month: string;
     uppercaseMonth: string;
-    spreadsheetName: string;
+    spreadsheetId: string;
     cellReference: string;
     subtractDays: number;
 };
@@ -26,7 +26,7 @@ export function getTodayInfo(): TodayInfo {
         monthAbbr: formatDateTime(now, "MMM"),
         month: formatDateTime(now, "MMMM"),
         uppercaseMonth: formatDateTime(now, "MMMM").toUpperCase(),
-        spreadsheetName: `[Tasker] ${now.year} Daily Tracker`,
+        spreadsheetId: tryGetGlobal("CHECKIN_SHEET_ID"),
         cellReference: `${CHECKIN_COLUMN_MAPPING[columnKey]}999`,
         subtractDays: 31 - now.daysInMonth,
     };

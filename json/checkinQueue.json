@@ -1,10 +1,10 @@
 [
     {
         "checkinFields": {
-            "spreadsheetName": "[Tasker] 2024 Daily Tracker",
             "date": "2024-09-03",
             "month": "Sep",
-            "cellReference": "E1"
+            "cellReference": "E1",
+            "spreadsheetId": "sheetId"
         },
         "formResponse": {
             "Journal": "1",

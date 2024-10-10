@@ -8,10 +8,10 @@ const prevDate = (JSON.parse(tryGetGlobal("CHECKIN_FIELDS")) as CheckinFields).d
 const today = Temporal.PlainDate.from(prevDate).add({ days: 1 });
 
 const checkinFields: CheckinFields = {
-    spreadsheetName: `[Tasker] ${today.year} Daily Tracker`,
     date: today.toString(),
     month: formatDateTime(today, "MMM"),
     cellReference: `${CHECKIN_COLUMN_MAPPING[today.day.toString()]}1`,
+    spreadsheetId: tryGetGlobal("CHECKIN_SHEET_ID"),
 };
 
 tasker.setGlobal("CHECKIN_FIELDS", JSON.stringify(checkinFields));

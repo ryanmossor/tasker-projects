@@ -15,10 +15,10 @@ export type CheckinQueueItem = {
 };
 
 export type CheckinFields = {
-    spreadsheetName: string;
     date: string;
     month: string;
     cellReference: string;
+    spreadsheetId: string;
 };
 
 export type CheckinResult = CheckinFields & {

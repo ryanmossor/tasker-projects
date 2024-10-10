@@ -5,7 +5,7 @@ import * as utils from "../../src/typescript/modules/utils";
 
 const baseQueueJson: CheckinQueueItem[] = [{
     checkinFields: {
-        spreadsheetName: "sheet",
+        spreadsheetId: "sheetId",
         date: "2024-05-07",
         month: "May",
         cellReference: "cell",

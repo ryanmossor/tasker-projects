@@ -32,7 +32,7 @@ describe("getTodayInfo", () => {
             monthAbbr: monthName.slice(0, 3),
             month: monthName,
             uppercaseMonth: monthName.toUpperCase(),
-            spreadsheetName: "[Tasker] 2023 Daily Tracker",
+            spreadsheetId: "sheetId",
             cellReference,
             subtractDays,
         });
@@ -52,7 +52,7 @@ describe("getTodayInfo", () => {
             monthAbbr: "Feb",
             month: "February",
             uppercaseMonth: "FEBRUARY",
-            spreadsheetName: "[Tasker] 2024 Daily Tracker",
+            spreadsheetId: "sheetId",
             cellReference: "AF999",
             subtractDays: 2,
         });

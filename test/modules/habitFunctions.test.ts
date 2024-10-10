@@ -226,7 +226,7 @@ describe("habitFunctions", () => {
             },
         ];
         const checkinFields: CheckinFields = {
-            spreadsheetName: "sheet",
+            spreadsheetId: "sheetId",
             date: today,
             month: "Aug",
             cellReference: "AB1",
