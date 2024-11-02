@@ -1,4 +1,5 @@
 import { getTodayInfo } from "../../src/typescript/checkin/getTodayInfo";
+import * as tasker from "../../src/typescript/dev/tasker";
 
 describe("getTodayInfo", () => {
     afterEach(() => {
@@ -21,6 +22,10 @@ describe("getTodayInfo", () => {
     ])("should return correct info for %s", (monthName, month, daysInMonth, subtractDays, cellReference = "AG999") => {
         // arrange
         Date.now = vi.fn().mockReturnValue(new Date(`2023-${month}-01T20:25:10.000Z`)); // called by Temporal
+        vi.spyOn(tasker, "global").mockImplementation((varName: string) => {
+            if (varName === "CHECKIN_SHEET")
+                return JSON.stringify({ year: 2023, spreadsheetId: "sheetId" });
+        });
 
         // act
         const result = getTodayInfo();

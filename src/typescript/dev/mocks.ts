@@ -33,7 +33,10 @@ export const mocks = {
         "spreadsheetId": "sheetId",
     }),
     CHECKIN_FIELDS_SET: "",
-    CHECKIN_SHEET_ID: "sheetId",
+    CHECKIN_SHEET: JSON.stringify({
+        "year": 2024,
+        "spreadsheetId": "sheetId",
+    }),
 
     TARGET_BEDTIME: "21:30",
     TARGET_WAKE_TIME: "05:30",

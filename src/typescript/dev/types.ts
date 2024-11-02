@@ -21,6 +21,11 @@ export type CheckinFields = {
     spreadsheetId: string;
 };
 
+export type SpreadsheetInfo = {
+    year: number;
+    spreadsheetId: string;
+};
+
 export type CheckinResult = CheckinFields & {
     resultsString: string;
 };

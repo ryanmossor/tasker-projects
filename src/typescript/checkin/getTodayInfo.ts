@@ -1,6 +1,9 @@
 import { Temporal } from "temporal-polyfill";
 import * as tasker from "../dev/tasker";
+import { SpreadsheetInfo } from "../dev/types";
+import { assert } from "../modules/assert";
 import { CHECKIN_COLUMN_MAPPING } from "../modules/constants";
+import Logger from "../modules/logger";
 import { formatDateTime, isEnvTasker, tryGetGlobal } from "../modules/utils";
 
 export type TodayInfo = {
@@ -15,23 +18,32 @@ export type TodayInfo = {
 };
 
 export function getTodayInfo(): TodayInfo {
-    const now = Temporal.Now.plainDateISO();
-    const columnKey = now.daysInMonth + 1 > 31
-        ? 31
-        : now.daysInMonth + 1;
+    try {
+        const now = Temporal.Now.plainDateISO();
+        const columnKey = now.daysInMonth + 1 > 31
+            ? 31
+            : now.daysInMonth + 1;
 
-    const todayInfo = {
-        daysInMonth: now.daysInMonth,
-        monthOfYear: now.month.toString(),
-        monthAbbr: formatDateTime(now, "MMM"),
-        month: formatDateTime(now, "MMMM"),
-        uppercaseMonth: formatDateTime(now, "MMMM").toUpperCase(),
-        spreadsheetId: tryGetGlobal("CHECKIN_SHEET_ID"),
-        cellReference: `${CHECKIN_COLUMN_MAPPING[columnKey]}999`,
-        subtractDays: 31 - now.daysInMonth,
-    };
+        const checkinSheetInfo: SpreadsheetInfo = JSON.parse(tryGetGlobal("CHECKIN_SHEET"));
+        assert(checkinSheetInfo.year === now.year, "Check-in sheet ID not up to date");
 
-    return todayInfo;
+        const todayInfo = {
+            daysInMonth: now.daysInMonth,
+            monthOfYear: now.month.toString(),
+            monthAbbr: formatDateTime(now, "MMM"),
+            month: formatDateTime(now, "MMMM"),
+            uppercaseMonth: formatDateTime(now, "MMMM").toUpperCase(),
+            spreadsheetId: checkinSheetInfo.spreadsheetId,
+            cellReference: `${CHECKIN_COLUMN_MAPPING[columnKey]}999`,
+            subtractDays: 31 - now.daysInMonth,
+        };
+
+        return todayInfo;
+    } catch (error) {
+        Logger.error({ message: error, funcName: getTodayInfo.name });
+    } finally {
+        tasker.exit();
+    }
 }
 
 if (isEnvTasker()) {
