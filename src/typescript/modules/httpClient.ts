@@ -29,7 +29,7 @@ type AxiosErrorLogMessage = {
     request?: {
         url: string;
         method: string;
-        data?: any;
+        body?: any;
         params?: any;
         headers?: any;
     };
@@ -41,7 +41,7 @@ export default class Http {
         body,
         params,
         headers,
-    }: HttpRequestParams<TData>) : Promise<TResponse> {
+    }: HttpRequestParams<TData>): Promise<TResponse> {
         if (isNullOrEmpty(tasker.global("ONLINE"))) {
             throw new HttpError("Device offline - skipping HTTP request", { method, url });
         }
@@ -65,7 +65,7 @@ export default class Http {
                 properties.request = {
                     url: error.config?.url,
                     method: error.config?.method,
-                    data: error.config?.data,
+                    body,
                     params: error.config?.params,
                     headers: error.config?.headers,
                 };
