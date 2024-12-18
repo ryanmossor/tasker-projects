@@ -135,3 +135,50 @@ document.addEventListener("DOMContentLoaded", () => {
         document.documentElement.classList.add("dark");
     }
 });
+
+function formatDateTime(input, formatStr) {
+    try {
+        // @ts-ignore
+        const date = Temporal.PlainDateTime.from(input);
+        const amOrPm = date.hour >= 12 ? "PM" : "AM";
+
+        let result = formatStr;
+        if (formatStr.includes("h") && date.hour === 0) {
+            result = result
+                .replaceAll("hh", String(12))
+                .replaceAll("h", String(12));
+        } else {
+            result = result
+                .replaceAll("hh", String((date.hour > 12 ? date.hour - 12 : date.hour)).padStart(2, "0"))
+                .replaceAll("h", String((date.hour > 12 ? date.hour - 12 : date.hour)));
+        }
+
+        return result
+            .replaceAll("HH", String(date.hour).padStart(2, "0"))
+            .replaceAll("H", String(date.hour))
+            .replaceAll("mm", String(date.minute).padStart(2, "0"))
+            .replaceAll("m", String(date.minute))
+            .replaceAll("ss", String(date.second).padStart(2, "0"))
+            .replaceAll("s", String(date.second))
+            .replaceAll("A", amOrPm)
+            .replaceAll("a", amOrPm.toLowerCase())
+            .replaceAll("YYYY", date.toLocaleString("en-US", { year: "numeric" }))
+            .replaceAll("YY", date.toLocaleString("en-US", { year: "2-digit" }))
+            .replaceAll("DDDD", date.toLocaleString("en-US", { weekday: "long" }))
+            .replaceAll("DDD", date.toLocaleString("en-US", { weekday: "short" }))
+            .replaceAll("DD", date.toLocaleString("en-US", { day: "2-digit" }))
+            .replaceAll("D", date.toLocaleString("en-US", { day: "numeric" }))
+            .replaceAll("MMMM", date.toLocaleString("en-US", { month: "long" }))
+            .replaceAll("MMM", date.toLocaleString("en-US", { month: "short" }))
+            .replaceAll("MM", date.toLocaleString("en-US", { month: "2-digit" }));
+    } catch (error) {
+        tasker.flashLong(`${error}`);
+        throw error;
+    }
+}
+
+function unixToDateTime(unixTs, timeZone) {
+    // @ts-ignore
+    const instant = Temporal.Instant.fromEpochSeconds(unixTs);
+    return instant.toZonedDateTimeISO(timeZone);
+}

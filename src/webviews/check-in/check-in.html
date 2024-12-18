@@ -9,6 +9,7 @@
     <script data-script-type="pc-dev-setup" src="../dev/mocks.js"></script>
     <script data-script-type="pc-dev-setup" src="../dev/tasker.js"></script>
 
+    <script src='https://cdn.jsdelivr.net/npm/temporal-polyfill@0.2.4/global.min.js'></script>
     <script src="../utils.js"></script>
     <script src="./checkinFunctions.js" defer></script>
 </head>
@@ -19,6 +20,7 @@
         <form>
             <div id="checklists"></div>
             <div id="range-items"></div>
+
             <div class="flex justify-center gap-x-6">
                 <button id="button" type="submit"
                         class="rounded-lg w-3/12 mx-4 mt-4 mb-8 py-3 text-white font-medium bg-blue-600">

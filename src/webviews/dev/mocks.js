@@ -5,11 +5,46 @@ const mocks = {
     // global
     DARK_MODE: "1",
     JSON_PATH: "/sdcard/Tasker/json",
+    CHECKIN_FIELDS: JSON.stringify({
+        "date": "2024-12-16",
+        "month": "Dec",
+        "cellReference": "R1",
+        "spreadsheetId": "sheetId",
+    }),
 
     // local
     time_precision: "2",
     metrics_path: "benchmark.json",
-    checkin_type: "Evening",
+    checkin_type: "Edit",
+    res: JSON.stringify({
+        "checkinFields": {
+            "date": "2024-12-16",
+            "month": "Dec",
+            "cellReference": "R1",
+            "spreadsheetId": "sheetId",
+        },
+        "formResponse": {
+            "Read": "1",
+            "Caffeine": "1",
+            "Work from home": "1",
+            "Aller-Clear": "1",
+            "Apigenin": "1",
+            "Magnesium": "1",
+            "Theanine": "1",
+            "Vitamin C": "1",
+            "Vitamin D3": "1",
+            "Overall Mood": "3",
+            "Irritability": "1",
+            "Productivity": "3",
+            "Sense of Control": "2",
+            "Sense of Purpose": "3",
+            "Stress": "2",
+            "White noise": "1",
+            "Feel Well-Rested": "3",
+        },
+        "sleepStart": 1734415184,
+        "sleepEnd": 1734446081,
+    }),
 };
 
 const mockFiles = {
@@ -43,6 +78,8 @@ const mockFiles = {
             },
         },
     ]),
+
+    "/sdcard/Tasker/json/checkinQueue.json": JSON.stringify([]),
 
     "/sdcard/Tasker/json/checkin.json": JSON.stringify({
         "habits": [
@@ -211,7 +248,7 @@ const mockFiles = {
                         "Apigenin",
                         "Creatine",
                         "Fish oil",
-                        "Magnesium Glycinate",
+                        "Magnesium",
                         "Theanine",
                         "Vitamin C",
                         "Vitamin D3",

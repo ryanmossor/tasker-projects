@@ -81,6 +81,7 @@ module.exports = {
         "@typescript-eslint/one-var-declaration-per-line": "off",
         "@typescript-eslint/quotes": ["error", "double"],
         "quote-props": ["error", "consistent"],
+        "spaced-comment": "off",
         "@typescript-eslint/vars-on-top": "off",
         "@typescript-eslint/naming-convention": "off"
     },

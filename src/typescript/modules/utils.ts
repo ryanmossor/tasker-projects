@@ -168,3 +168,8 @@ export function formatDateTime(
         throw error;
     }
 }
+
+export function unixToDateTime(unixTs: number, timeZone: string): Temporal.PlainDateTime {
+    const instant = Temporal.Instant.fromEpochSeconds(unixTs);
+    return instant.toZonedDateTimeISO(timeZone).toPlainDateTime();
+}

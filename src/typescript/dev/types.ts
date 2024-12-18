@@ -9,6 +9,7 @@ export type CheckinLists = {
 export type CheckinQueueItem = {
     checkinFields: CheckinFields;
     formResponse: Record<string, string>;
+    timeZoneId: string;
     getWeight?: boolean;
     sleepStart?: number;
     sleepEnd?: number;

@@ -1,5 +1,5 @@
 import { Temporal } from "temporal-polyfill";
-import { parseTime, setSleepTime, updateSleepHabit } from "../../src/typescript/checkin/setSleepTime";
+import { setSleepTime, updateSleepHabit } from "../../src/typescript/checkin/setSleepTime";
 import { CheckinQueueItem, Habit } from "../../src/typescript/dev/types";
 import * as utils from "../../src/typescript/modules/utils";
 
@@ -11,36 +11,13 @@ const baseQueueJson: CheckinQueueItem[] = [{
         cellReference: "cell",
     },
     formResponse: { "habit1": "1" },
+    timeZoneId: "America/Chicago",
 }];
 const path = "/path/to/file.json";
 
 describe("setSleepTime", () => {
     afterEach(() => {
         vi.restoreAllMocks();
-    });
-
-    describe("parseTime", () => {
-        test.each([
-            "12:34:56 AM",
-            "12:34:56 PM",
-        ])("should remove AM/PM from time", (time) => {
-            // arrange & act
-            const result = parseTime(time);
-
-            // assert
-            expect(result).toBe("12:34:56");
-        });
-
-        test.each([
-            { time: "05:30:00 AM", expectedResult: "05:30:00" },
-            { time: "09:30:00 PM", expectedResult: "21:30:00" },
-        ])("should convert 'hh:mm:ss A' format to 'HH:mm:ss' format", ({ time, expectedResult }) => {
-            // arrange & act
-            const result = parseTime(time);
-
-            // assert
-            expect(result).toBe(expectedResult);
-        });
     });
 
     describe("setSleepTime", () => {
@@ -59,7 +36,6 @@ describe("setSleepTime", () => {
 
             // assert
             expect(result.sleepStart).toBe(1715132417);
-            expect(result.formResponse.Bedtime).toBe("08:40:00 PM");
         });
 
         it("should set sleep end time", () => {
@@ -80,7 +56,6 @@ describe("setSleepTime", () => {
 
             // assert
             expect(result.sleepEnd).toBe(1715162173);
-            expect(result.formResponse["Wake-up time"]).toBe("04:56:00 AM");
         });
 
         it("should do nothing if null queueItem provided", () => {
@@ -170,7 +145,6 @@ describe("setSleepTime", () => {
                 targetWakeTime,
                 startOrEnd: "Start",
                 required: 2,
-                now: Temporal.Now.zonedDateTimeISO(),
             });
 
             // assert
@@ -190,7 +164,6 @@ describe("setSleepTime", () => {
                 targetWakeTime,
                 startOrEnd: "Start",
                 required: 2,
-                now: Temporal.Now.zonedDateTimeISO(),
             });
 
             // assert
@@ -198,15 +171,22 @@ describe("setSleepTime", () => {
         });
 
         test.each([
-            { bedtime: "08:59:00 PM", wakeTime: "06:00:00" },
-            { bedtime: "10:59:00 PM", wakeTime: "04:55:00" },
-        ])("should not update sleep habit when only target bedtime OR wake time met with both required", ({ bedtime, wakeTime }) => {
+            {
+                sleepStart: 1715133540, // 2024-05-07 20:59:00
+                sleepEnd: 1715166000, // 2024-05-08 06:00:00
+            },
+            {
+                sleepStart: 1715140740, // 2024-05-07 10:59:00
+                sleepEnd: 1715162100, // 2024-05-08 04:55:00
+            },
+        ])("should not update sleep habit when only target bedtime OR wake time met with both required", ({ sleepStart, sleepEnd }) => {
             // arrange
             const queueItem = structuredClone(baseQueueJson[0]);
-            queueItem.formResponse.Bedtime = bedtime;
-            queueItem.formResponse["Wake-up time"] = wakeTime;
+            queueItem.sleepStart = sleepStart;
+            queueItem.sleepEnd = sleepEnd;
 
-            Date.now = vi.fn().mockReturnValue(new Date(`2024-05-08T${wakeTime}.000`)); // called by Temporal
+            const mockTime = utils.unixToDateTime(sleepEnd, queueItem.timeZoneId).toPlainTime;
+            Date.now = vi.fn().mockReturnValue(new Date(`2024-05-08T${mockTime.toString()}.000`)); // called by Temporal
 
             // act
             const result = updateSleepHabit({
@@ -216,7 +196,6 @@ describe("setSleepTime", () => {
                 targetWakeTime,
                 startOrEnd: "End",
                 required: 2,
-                now: Temporal.Now.zonedDateTimeISO(),
             });
 
             // assert
@@ -241,7 +220,6 @@ describe("setSleepTime", () => {
                 targetWakeTime,
                 startOrEnd: "Start",
                 required: 1,
-                now: Temporal.Now.zonedDateTimeISO(),
             });
 
             // assert
@@ -268,7 +246,6 @@ describe("setSleepTime", () => {
                 targetWakeTime,
                 startOrEnd: "End",
                 required: 1,
-                now: Temporal.Now.zonedDateTimeISO(),
             });
 
             // assert
@@ -292,7 +269,6 @@ describe("setSleepTime", () => {
                 targetWakeTime,
                 startOrEnd: "End",
                 required: 2,
-                now: Temporal.Now.zonedDateTimeISO(),
             });
 
             // assert

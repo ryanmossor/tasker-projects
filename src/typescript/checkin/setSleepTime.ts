@@ -4,22 +4,7 @@ import { CheckinFields, CheckinJson, CheckinQueueItem, Habit } from "../dev/type
 import { assert } from "../modules/assert";
 import { updateLastHabitDate } from "../modules/habitFunctions";
 import Logger from "../modules/logger";
-import { formatDateTime, isEnvTasker, readJsonData, tryGetGlobal, tryGetLocal } from "../modules/utils";
-
-/**
- * @param formattedTime - Formatted as `hh:mm:ss A` from check-in queue item
- * @returns Time formatted as `HH:mm:ss`
- */
-export function parseTime(formattedTime: string) {
-    const time = formattedTime.split(" ")[0];
-    const hour = Number(formattedTime.substring(0, 2));
-
-    if (hour < 12 && formattedTime.endsWith("PM")) {
-        return `${hour + 12}${time.substring(2)}`;
-    }
-
-    return formattedTime.split(" ")[0];
-}
+import { isEnvTasker, readJsonData, tryGetGlobal, tryGetLocal, unixToDateTime } from "../modules/utils";
 
 /**
  * Updates `lastDate` and `pastWeek` properties of `sleepHabit` object if sleep target(s) met
@@ -29,17 +14,15 @@ export function parseTime(formattedTime: string) {
  * @param targetWakeTime - Formatted as `HH:mm`
  * @param startOrEnd - Valid values: `'Start'`, `'End'`
  * @param required - Number of target sleep times required for success. `1` for start OR end, `2` for start AND end
- * @param now - Current time as {@link Temporal.ZonedDateTime}
  * @returns `sleepHabit` object with `lastDate` and `pastWeek` properties updated, if sleep target met
  */
-export function updateSleepHabit({ sleepHabit, queueItem, targetBedtime, targetWakeTime, startOrEnd, required, now }: {
+export function updateSleepHabit({ sleepHabit, queueItem, targetBedtime, targetWakeTime, startOrEnd, required }: {
     sleepHabit: Habit,
     queueItem: CheckinQueueItem,
     targetBedtime: string,
     targetWakeTime: string,
     startOrEnd: "Start" | "End",
     required: number,
-    now: Temporal.ZonedDateTime,
 }): Habit {
     const checkinDate = queueItem.checkinFields.date;
 
@@ -47,9 +30,13 @@ export function updateSleepHabit({ sleepHabit, queueItem, targetBedtime, targetW
         return sleepHabit;
     }
 
-    const bedtimeFormatted = parseTime(queueItem.formResponse.Bedtime);
-    const actualBedtime = Temporal.PlainDateTime.from(`${now.toPlainDate()} ${bedtimeFormatted}`);
+    const actualBedtime = unixToDateTime(queueItem.sleepStart, queueItem.timeZoneId);
     const targetBedtimeDt = Temporal.PlainDateTime.from(`${checkinDate} ${targetBedtime}:00`);
+
+    Logger.debug({
+        message: `Comparing actual and target bedtimes for ${checkinDate}`,
+        properties: { actual: actualBedtime.toString(), target: targetBedtimeDt.toString() },
+    });
 
     let successCount = 0;
     if (Temporal.PlainDateTime.compare(actualBedtime, targetBedtimeDt) === -1) {
@@ -57,11 +44,14 @@ export function updateSleepHabit({ sleepHabit, queueItem, targetBedtime, targetW
     }
 
     if (startOrEnd === "End") {
-        const wakeTimeFormatted = parseTime(queueItem.formResponse["Wake-up time"]);
-        const actualWakeTime = Temporal.PlainDateTime.from(`${now.toPlainDate()} ${wakeTimeFormatted}`);
-
+        const actualWakeTime = unixToDateTime(queueItem.sleepEnd, queueItem.timeZoneId);
         const checkinNextMorning = Temporal.PlainDate.from(checkinDate).add({ days: 1 });
         const targetWakeTimeDt = Temporal.PlainDateTime.from(`${checkinNextMorning} ${targetWakeTime}:00`);
+
+        Logger.debug({
+            message: `Comparing actual and target wake times for ${checkinDate}`,
+            properties: { actual: actualWakeTime.toString(), target: targetWakeTimeDt.toString() },
+        });
 
         if (Temporal.PlainDateTime.compare(actualWakeTime, targetWakeTimeDt) === -1) {
             successCount += 1;
@@ -92,19 +82,16 @@ export function setSleepTime({ queueItem, startOrEnd, now }: {
         assert(queueItem != null, "Queue item must not be null");
         assert(queueItem[`sleep${startOrEnd}`] == null, `sleep${startOrEnd} time already exists for date`);
 
-        const formatted = formatDateTime(now, "hh:mm:00 A");
         const unix = now.epochSeconds;
 
         Logger.info({
-            message: `Set sleep${startOrEnd} time to ${formatted} (unix: ${unix})`,
+            message: `Set sleep${startOrEnd} time to ${unix}`,
             logFile: `/sdcard/Tasker/log/sleep/${now.toPlainYearMonth()}.txt`,
         });
 
         if (startOrEnd === "Start") {
-            queueItem.formResponse.Bedtime = formatted;
             queueItem.sleepStart = unix;
         } else {
-            queueItem.formResponse["Wake-up time"] = formatted;
             queueItem.sleepEnd = unix;
         }
 
@@ -118,15 +105,13 @@ export function setSleepTime({ queueItem, startOrEnd, now }: {
 
 if (isEnvTasker()) {
     try {
-        const now = Temporal.Now.zonedDateTimeISO();
         const { date: checkinDate }: CheckinFields = JSON.parse(tryGetGlobal("CHECKIN_FIELDS"));
         const startOrEnd = tryGetLocal("par1") as "Start" | "End";
 
         const queueJson = readJsonData<CheckinQueueItem[]>({ filename: "checkinQueue.json" });
         let queueItem = queueJson.data.find((x) => x.checkinFields.date === checkinDate);
 
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        queueItem = setSleepTime({ queueItem, startOrEnd, now });
+        queueItem = setSleepTime({ queueItem, startOrEnd, now: Temporal.Now.zonedDateTimeISO() });
         queueJson.save();
 
         const checkinJson = readJsonData<CheckinJson>({ filename: "checkin.json" });
@@ -140,7 +125,6 @@ if (isEnvTasker()) {
             targetWakeTime: tryGetGlobal("TARGET_WAKE_TIME"),
             startOrEnd,
             required: Number(tryGetGlobal("SLEEP_TARGETS_REQUIRED") ?? 2),
-            now,
         });
 
         checkinJson.save();
