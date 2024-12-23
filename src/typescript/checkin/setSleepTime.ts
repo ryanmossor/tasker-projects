@@ -25,12 +25,17 @@ export function updateSleepHabit({ sleepHabit, queueItem, targetBedtime, targetW
     required: number,
 }): Habit {
     const checkinDate = queueItem.checkinFields.date;
-
     if ((required === 2 && startOrEnd === "Start") || sleepHabit.pastWeek.includes(checkinDate)) {
         return sleepHabit;
     }
 
-    const actualBedtime = unixToDateTime(queueItem.sleepStart, queueItem.timeZoneId);
+    // unixToDateTime returns 1/1/1970 if sleepStart/End is null, guaranteeing target times will always be met.
+    // Fallback is in distant future to prevent this.
+    const fallbackDateTime = Temporal.PlainDateTime.from("9999-12-31 23:59:59");
+
+    const actualBedtime = queueItem.sleepStart == null
+        ? fallbackDateTime
+        : unixToDateTime(queueItem.sleepStart, queueItem.timeZoneId);
     const targetBedtimeDt = Temporal.PlainDateTime.from(`${checkinDate} ${targetBedtime}:00`);
 
     Logger.debug({
@@ -44,7 +49,9 @@ export function updateSleepHabit({ sleepHabit, queueItem, targetBedtime, targetW
     }
 
     if (startOrEnd === "End") {
-        const actualWakeTime = unixToDateTime(queueItem.sleepEnd, queueItem.timeZoneId);
+        const actualWakeTime = queueItem.sleepEnd == null
+            ? fallbackDateTime
+            : unixToDateTime(queueItem.sleepEnd, queueItem.timeZoneId);
         const checkinNextMorning = Temporal.PlainDate.from(checkinDate).add({ days: 1 });
         const targetWakeTimeDt = Temporal.PlainDateTime.from(`${checkinNextMorning} ${targetWakeTime}:00`);
 

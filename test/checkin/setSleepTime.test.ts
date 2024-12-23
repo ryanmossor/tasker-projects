@@ -176,7 +176,7 @@ describe("setSleepTime", () => {
                 sleepEnd: 1715166000, // 2024-05-08 06:00:00
             },
             {
-                sleepStart: 1715140740, // 2024-05-07 10:59:00
+                sleepStart: 1715140740, // 2024-05-07 22:59:00
                 sleepEnd: 1715162100, // 2024-05-08 04:55:00
             },
         ])("should not update sleep habit when only target bedtime OR wake time met with both required", ({ sleepStart, sleepEnd }) => {
@@ -202,13 +202,57 @@ describe("setSleepTime", () => {
             expect(result).toStrictEqual(baseSleepHabit);
         });
 
+        it("should not update sleep habit with 2 required and missing sleepStart", () => {
+            // arrange
+            const queueItem = structuredClone(baseQueueJson[0]);
+            queueItem.sleepEnd = 1715162100; // 2024-05-08 04:55:00
+
+            const mockTime = utils.unixToDateTime(queueItem.sleepEnd, queueItem.timeZoneId).toPlainTime;
+            Date.now = vi.fn().mockReturnValue(new Date(`2024-05-08T${mockTime.toString()}.000`)); // called by Temporal
+
+            // act
+            const result = updateSleepHabit({
+                sleepHabit: structuredClone(baseSleepHabit),
+                queueItem,
+                targetBedtime,
+                targetWakeTime,
+                startOrEnd: "End",
+                required: 2,
+            });
+
+            // assert
+            expect(result).toStrictEqual(baseSleepHabit);
+        });
+
+        it("should not update sleep habit with 2 required and missing sleepEnd", () => {
+            // arrange
+            const queueItem = structuredClone(baseQueueJson[0]);
+            queueItem.sleepStart = 1715133540; // 2024-05-07 20:59:00
+
+            const mockTime = utils.unixToDateTime(queueItem.sleepStart, queueItem.timeZoneId).toPlainTime;
+            Date.now = vi.fn().mockReturnValue(new Date(`2024-05-07T${mockTime.toString()}.000`)); // called by Temporal
+
+            // act
+            const result = updateSleepHabit({
+                sleepHabit: structuredClone(baseSleepHabit),
+                queueItem,
+                targetBedtime,
+                targetWakeTime,
+                startOrEnd: "End",
+                required: 2,
+            });
+
+            // assert
+            expect(result).toStrictEqual(baseSleepHabit);
+        });
+
         it("should update sleep habit when target bedtime met with only 1 required", () => {
             // arrange
-            const mockCurrentTime = "09:29:00";
+            const mockCurrentTime = "20:59:00";
 
             const sleepHabit = structuredClone(baseSleepHabit);
             const queueItem = structuredClone(baseQueueJson[0]);
-            queueItem.formResponse.Bedtime = `${mockCurrentTime} PM`;
+            queueItem.sleepStart = 1715133540;
 
             Date.now = vi.fn().mockReturnValue(new Date(`${queueItem.checkinFields.date}T${mockCurrentTime}.000`)); // called by Temporal
 
@@ -230,13 +274,11 @@ describe("setSleepTime", () => {
 
         it("should update sleep habit when target wake time met with only 1 required", () => {
             // arrange
-            const mockCurrentTime = "04:55:00";
-
             const queueItem = structuredClone(baseQueueJson[0]);
-            queueItem.formResponse.Bedtime = "11:59:00 PM";
-            queueItem.formResponse["Wake-up time"] = `${mockCurrentTime} AM`;
+            queueItem.sleepStart = 1715140740; // 2024-05-07 22:59:00
+            queueItem.sleepEnd = 1715162100; // 2024-05-08 04:55:00
 
-            Date.now = vi.fn().mockReturnValue(new Date(`${queueItem.checkinFields.date}T${mockCurrentTime}.000`)); // called by Temporal
+            Date.now = vi.fn().mockReturnValue(new Date(`${queueItem.checkinFields.date}T04:55:00.000`)); // called by Temporal
 
             // act
             const result = updateSleepHabit({
@@ -258,8 +300,8 @@ describe("setSleepTime", () => {
             // arrange
             const sleepHabit = structuredClone(baseSleepHabit);
             const queueItem = structuredClone(baseQueueJson[0]);
-            queueItem.formResponse.Bedtime = "08:59:00 PM";
-            queueItem.formResponse["Wake-up time"] = "04:55:00 AM";
+            queueItem.sleepStart = 1715133540; // 2024-05-07 20:59:00
+            queueItem.sleepEnd = 1715162100; // 2024-05-08 04:55:00
 
             // act
             const result = updateSleepHabit({

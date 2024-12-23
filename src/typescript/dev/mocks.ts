@@ -27,10 +27,10 @@ export const mocks = {
     YOGA_TIME: "7.20",
 
     CHECKIN_FIELDS: JSON.stringify({
-        "date": "2024-09-03",
-        "month": "Sep",
-        "cellReference": "E1",
-        "spreadsheetId": "sheetId",
+        "date": "2024-12-22",
+        "month": "Dec",
+        "cellReference": "X1",
+        "spreadsheetId": "sheetId"
     }),
     CHECKIN_FIELDS_SET: "",
     CHECKIN_SHEET: JSON.stringify({

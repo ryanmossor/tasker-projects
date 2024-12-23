@@ -1,9 +1,9 @@
 [
     {
         "checkinFields": {
-            "date": "2024-09-03",
-            "month": "Sep",
-            "cellReference": "E1",
+            "date": "2024-12-22",
+            "month": "Dec",
+            "cellReference": "X1",
             "spreadsheetId": "sheetId"
         },
         "formResponse": {
@@ -37,6 +37,7 @@
             "Wake-up time": "05:32:00 AM",
             "Total Time in Bed": "8:47"
         },
-        "getWeight": true
+        "getWeight": true,
+        "timeZoneId": "America/Chicago"
     }
 ]
