@@ -170,6 +170,13 @@ export function formatDateTime(
 }
 
 export function unixToDateTime(unixTs: number, timeZone: string): Temporal.PlainDateTime {
+    if (isNullOrEmpty(unixTs)) {
+        const error = new Error("Unix timestamp cannot be null");
+        Logger.error({ message: error, funcName: unixToDateTime.name });
+        tasker.exit();
+        throw error;
+    }
+
     const instant = Temporal.Instant.fromEpochSeconds(unixTs);
     return instant.toZonedDateTimeISO(timeZone).toPlainDateTime();
 }
