@@ -41,7 +41,6 @@ export function getTodayInfo(): TodayInfo {
         return todayInfo;
     } catch (error) {
         Logger.error({ message: error, funcName: getTodayInfo.name });
-    } finally {
         tasker.exit();
     }
 }
