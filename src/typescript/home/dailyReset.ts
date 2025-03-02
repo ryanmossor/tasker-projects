@@ -13,7 +13,6 @@ try {
 
     if (queueItem != null) {
         checkinJson.data.habits = updateTrackedItemDates(queueItem, checkinJson.data.habits);
-        queueJson.save();
     } else {
         Logger.warning({ message: `Queue item not found for ${checkinFields.date}. Cannot update tracked habits.` });
     }
