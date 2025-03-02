@@ -2,6 +2,7 @@ import * as tasker from "../dev/tasker";
 import { NotificationPayload } from "../dev/types";
 
 export const notificationActions = {
+    processCheckinQueue: "📅 Process Check-in Queue",
     rewardsUi: "📅 Rewards UI",
     setReminder: "⏰ Reminder Prompt",
     viewFile: "View File",

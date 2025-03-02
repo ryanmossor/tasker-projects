@@ -3,6 +3,7 @@ import { CheckinApiResponse, CheckinQueueItem } from "../dev/types";
 import { assert } from "../modules/assert";
 import Http from "../modules/httpClient";
 import Logger from "../modules/logger";
+import { notificationActions } from "../modules/sendNotification";
 import { isEnvTasker, readJsonData, tryGetGlobal } from "../modules/utils";
 
 async function processCheckinQueue() {
@@ -33,6 +34,13 @@ async function processCheckinQueue() {
                 message: "Unprocessed items returned from check-in API",
                 properties: response.unprocessed,
                 funcName: processCheckinQueue.name,
+                customAction1: {
+                    label: "Retry",
+                    action: {
+                        name: notificationActions.processCheckinQueue,
+                        par1: "retry",
+                    },
+                },
             });
         }
 
