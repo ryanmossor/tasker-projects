@@ -1,6 +1,6 @@
 import { Temporal } from "temporal-polyfill";
 import * as tasker from "../dev/tasker";
-import { LogMessage, LogParams } from "../dev/types";
+import { LogMessage, LogParams, NotificationPayload } from "../dev/types";
 import { notificationActions, notificationIcons, sendNotification } from "./sendNotification";
 
 const LOG_LEVEL = {
@@ -30,7 +30,7 @@ export default class Logger {
      * @param {any} [options.properties] - Additional properties (e.g., arrays, JSON objects)
      * @param {string} [options.funcName] - Name of function logger was called from
      */
-    private static log({ level, message, logFile, properties, funcName }: LogParams) {
+    private static log({ level, message, logFile, properties, funcName, customAction1, customAction2 }: LogParams) {
         if (!(message instanceof Error) && isNullOrWhitespace(message)) {
             return;
         }
@@ -64,7 +64,7 @@ export default class Logger {
 
         if (LOG_LEVEL[level] <= LOG_LEVEL[this.notifThreshold]) {
             const notifTitle = `Log Message: ${logMessage.task}`;
-            sendNotification({
+            const notifPayload: NotificationPayload = {
                 title: notifTitle,
                 text: `${logMessage.message}`,
                 icon: notificationIcons.xEyes,
@@ -78,27 +78,36 @@ export default class Logger {
                         par2: notifTitle,
                     },
                 },
-            });
+            };
+
+            if (customAction1 != null) {
+                notifPayload.action2 = customAction1;
+            }
+            if (customAction2 != null) {
+                notifPayload.action3 = customAction2;
+            }
+
+            sendNotification(notifPayload);
         }
     }
 
-    public static error({ message, logFile, properties, funcName }: Omit<LogParams, "level">) {
-        this.log({ level: "ERROR", message, logFile, properties, funcName });
+    public static error({ message, logFile, properties, funcName, customAction1, customAction2 }: Omit<LogParams, "level">) {
+        this.log({ level: "ERROR", message, logFile, properties, funcName, customAction1, customAction2 });
     }
 
-    public static warning({ message, logFile, properties, funcName }: Omit<LogParams, "level">) {
-        this.log({ level: "WARNING", message, logFile, properties, funcName });
+    public static warning({ message, logFile, properties, funcName, customAction1, customAction2 }: Omit<LogParams, "level">) {
+        this.log({ level: "WARNING", message, logFile, properties, funcName, customAction1, customAction2 });
     }
 
-    public static info({ message, logFile, properties, funcName }: Omit<LogParams, "level">) {
-        this.log({ level: "INFO", message, logFile, properties, funcName });
+    public static info({ message, logFile, properties, funcName, customAction1, customAction2 }: Omit<LogParams, "level">) {
+        this.log({ level: "INFO", message, logFile, properties, funcName, customAction1, customAction2 });
     }
 
-    public static debug({ message, logFile, properties, funcName }: Omit<LogParams, "level">) {
-        this.log({ level: "DEBUG", message, logFile, properties, funcName });
+    public static debug({ message, logFile, properties, funcName, customAction1, customAction2 }: Omit<LogParams, "level">) {
+        this.log({ level: "DEBUG", message, logFile, properties, funcName, customAction1, customAction2 });
     }
 
-    public static trace({ message, logFile, properties, funcName }: Omit<LogParams, "level">) {
-        this.log({ level: "TRACE", message, logFile, properties, funcName });
+    public static trace({ message, logFile, properties, funcName, customAction1, customAction2 }: Omit<LogParams, "level">) {
+        this.log({ level: "TRACE", message, logFile, properties, funcName, customAction1, customAction2 });
     }
 }

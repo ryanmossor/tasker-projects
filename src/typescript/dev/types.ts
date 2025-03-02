@@ -155,6 +155,8 @@ export type LogParams = {
     logFile?: string;
     properties?: Record<string, any>;
     funcName?: string;
+    customAction1?: NotificationAction;
+    customAction2?: NotificationAction;
 };
 
 export type PlaylistItem = youtube_v3.Schema$PlaylistItemListResponse;
