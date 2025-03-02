@@ -1,4 +1,5 @@
 import { Temporal } from "temporal-polyfill";
+import { config } from "process";
 import * as tasker from "../dev/tasker";
 import { LogMessage, LogParams, NotificationPayload } from "../dev/types";
 import { notificationActions, notificationIcons, sendNotification } from "./sendNotification";
@@ -21,6 +22,16 @@ export default class Logger {
         ? "WARNING"
         : tasker.global("LOG_NOTIF_THRESHOLD");
 
+    private static isValidLogLevel(level: string): boolean {
+        if (isNullOrWhitespace(level)) {
+            return false;
+        }
+        if (!(level.toUpperCase() in LOG_LEVEL)) {
+            return false;
+        }
+        return true;
+    }
+
     /**
      * Writes JSON-formatted log messages to a file.
      * @param {LogParams} options
@@ -35,8 +46,20 @@ export default class Logger {
             return;
         }
 
-        const logLevel = isNullOrWhitespace(tasker.global("LOG_LEVEL")) ? "INFO" : tasker.global("LOG_LEVEL");
-        if (LOG_LEVEL[level] > LOG_LEVEL[logLevel]) {
+        let configuredLogLevel = tasker.global("LOG_LEVEL");
+        if (!this.isValidLogLevel(configuredLogLevel)) {
+            sendNotification({
+                title: "Invalid Log Level",
+                text: `Invalid log level configured: ${configuredLogLevel}. Defaulting to INFO.`,
+                icon: notificationIcons.xEyes,
+                priority: 5,
+                category: "Log Warnings/Errors",
+            });
+
+            configuredLogLevel = "INFO";
+        }
+
+        if (LOG_LEVEL[level] > LOG_LEVEL[configuredLogLevel]) {
             return;
         }
 
