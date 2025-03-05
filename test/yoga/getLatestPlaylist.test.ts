@@ -1,6 +1,5 @@
-import { YogaJson } from "../../src/typescript/dev/types";
+import { YogaJson, Playlist } from "../../src/typescript/dev/types";
 import Http from "../../src/typescript/modules/httpClient";
-import { Playlist } from "../../src/typescript/types/youtubeTypes";
 import { getLatestPlaylist, updatePlaylistData } from "../../src/typescript/yoga/getLatestPlaylist";
 
 describe("YWA monthly playlist", () => {
