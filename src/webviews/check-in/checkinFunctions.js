@@ -244,6 +244,7 @@ function submitCheckinForm(event) {
         queueJson.save();
         if (tasker.global("DRY_RUN") !== "1") {
             tasker.setGlobal(`${checkinType.toUpperCase()}_CHECKIN_COMPLETE`, "1");
+            tasker.setLocal("form_submitted", "1");
         }
         tasker.flash("Check-in successfully completed");
     } catch (error) {
