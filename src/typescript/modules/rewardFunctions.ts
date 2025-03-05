@@ -106,7 +106,11 @@ function _createResultsLine(habit: Habit, sickInjuredDays: number, oneWeekAgo: s
     const capitalizedHabitName = capitalize(habit.avoid ? `${habit.name}*` : habit.name);
     const score = habit.pastWeek.length;
     const adjustedTarget = _maybeAdjustTarget(habit, sickInjuredDays);
-    const result = `${capitalizedHabitName} – ${score}/${adjustedTarget}`;
+    let result = `${capitalizedHabitName} – ${score}/${adjustedTarget}`;
+
+    if (habit.avoid || habit.pastWeek.length === 0) {
+        result = `${result}    [${habit.daysSince} days since]`;
+    }
 
     // If target won't be met tomorrow without doing the habit today, prepend result with ❗
     if (!habit.avoid && (score === adjustedTarget) && (habit.pastWeek[0] === oneWeekAgo)) {
