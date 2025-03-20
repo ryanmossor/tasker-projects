@@ -26,19 +26,16 @@ try {
         "GYM",
         "NEW_DAY",
         "LOG_WEIGHT",
-        "WORKOUT_DONE",
         "CHECKIN_FIELDS_SET",
         "EVENING_CHECKIN_COMPLETE",
+        "EVENING_CHECKIN_READY",
         "MORNING_CHECKIN_COMPLETE",
-        "DISTRACTION_RESET_COUNT",
-        "DISTRACTION_RESET_TIME",
+        "MORNING_CHECKIN_READY",
     ];
 
     for (const globalVar of vars) {
         tasker.setGlobal(globalVar, null);
     }
-
-    tasker.writeFile(`/sdcard/Tasker/distraction-keys/${crypto.randomUUID()}`, btoa(crypto.randomUUID()), false);
 } catch (error) {
-    Logger.error({ message: `${error}`, funcName: "dailyReset" });
+    Logger.error({ message: error, funcName: "dailyReset" });
 }
