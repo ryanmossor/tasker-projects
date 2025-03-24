@@ -1,5 +1,4 @@
 import { Temporal } from "temporal-polyfill";
-import { config } from "process";
 import * as tasker from "../dev/tasker";
 import { LogMessage, LogParams, NotificationPayload } from "../dev/types";
 import { notificationActions, notificationIcons, sendNotification } from "./sendNotification";
