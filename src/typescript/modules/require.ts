@@ -31,6 +31,7 @@ function handleError(error: Error): void {
         text: `${logMessage.message}`,
         icon: "android.resource://net.dinglisch.android.taskerm/drawable/mw_social_sentiment_very_dissatisfied",
         priority: 5,
+        soundFile: "/sdcard/Notifications/silent.mp3",
         category: "Log Warnings/Errors",
         action1: {
             label: "View Log",
