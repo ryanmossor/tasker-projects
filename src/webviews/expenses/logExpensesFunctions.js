@@ -116,7 +116,7 @@ function insertSymbol(inputId, symbol) {
 
 function submitResults() {
     try {
-        const vlookupFormula = "=IFERROR(VLOOKUP(INDIRECT(ADDRESS(ROW(), COLUMN()-1, 4)), categories!$B$2:$C$102, 2, FALSE), \"\")";
+        const vlookupFormula = "=IFERROR(VLOOKUP(INDIRECT(ADDRESS(ROW(), COLUMN()+1, 4)), categories!$B$2:$C$102, 2, FALSE), \"\")";
         const refundFormula = "=IF(INDIRECT(ADDRESS(ROW(), 1, 4))<>\"\", 0, \"\")";
         const adjustedCostFormula = "=IF(INDIRECT(ADDRESS(ROW(), 1, 4))<>\"\", INDIRECT(ADDRESS(ROW(), 6, 4)) - INDIRECT(ADDRESS(ROW(), 7, 4)), \"\")";
 
@@ -128,7 +128,7 @@ function submitResults() {
             const expenseDetails = /** @type {HTMLInputElement} */(document.getElementById(`details-${i}`)).value ?? "";
             const amount = /** @type {HTMLInputElement} */(document.getElementById(`amount-${i}`)).value;
 
-            const line = `${date}=:=${category}=:=${vlookupFormula}=:=${vendor}=:=${expenseDetails}=:=${amount}=:=${refundFormula}=:=${adjustedCostFormula}`;
+            const line = `${date}=:=${vlookupFormula}=:=${category}=:=${vendor}=:=${expenseDetails}=:=${amount}=:=${refundFormula}=:=${adjustedCostFormula}`;
 
             if (results !== "") {
                 results += "|||"; // add row separator if results already contain data
